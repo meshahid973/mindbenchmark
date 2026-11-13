@@ -1,6 +1,5 @@
 import { Zap } from "lucide-react";
 import { Link, NavLink } from "react-router";
-import { prefetchGames } from "../app/loadGames";
 import { ThemeToggle } from "./ThemeToggle";
 
 const navigation = [
@@ -22,8 +21,6 @@ export function SiteHeader() {
             <NavLink
               key={to}
               to={to}
-              onPointerEnter={to === "/games" ? prefetchGames : undefined}
-              onFocus={to === "/games" ? prefetchGames : undefined}
               className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
             >
               {label}

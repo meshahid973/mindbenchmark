@@ -1,7 +1,6 @@
 import { ArrowRight, Zap } from "lucide-react";
 import { Link } from "react-router";
 import { games } from "../app/games";
-import { prefetchGames } from "../app/loadGames";
 import { GameGrid } from "../components/GameGrid";
 
 export function Home() {
@@ -15,8 +14,6 @@ export function Home() {
           <Link
             className="primary-button"
             to="/games"
-            onPointerEnter={prefetchGames}
-            onFocus={prefetchGames}
           >
             Explore games <ArrowRight size={17} aria-hidden="true" />
           </Link>
@@ -29,8 +26,6 @@ export function Home() {
           <Link
             className="text-link"
             to="/games"
-            onPointerEnter={prefetchGames}
-            onFocus={prefetchGames}
           >
             All games <ArrowRight size={16} aria-hidden="true" />
           </Link>
