@@ -104,11 +104,6 @@
   font-size: 0.9rem;
 }
 
-.filter-row {
-  display: flex;
-  margin-block: 29px 22px;
-}
-
 @media (max-width: 640px) {
   .hero {
     min-height: 296px;
