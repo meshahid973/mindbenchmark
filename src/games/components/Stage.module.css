@@ -1,0 +1,204 @@
+.panel {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: clamp(355px, 40vw, 460px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 18px;
+  color: var(--text);
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.action {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.action:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: -6px;
+}
+
+.panel[data-signal="red"] {
+  background: #ce2941;
+  color: #fff;
+}
+
+.panel[data-signal="green"] {
+  background: #23af60;
+  color: #fff;
+}
+
+.symbol {
+  margin-bottom: 23px;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  font-weight: 720;
+  letter-spacing: -0.06em;
+  line-height: 1.1;
+}
+
+.message {
+  margin-top: 14px;
+  color: inherit;
+  font-size: 0.94rem;
+  line-height: 1.5;
+  opacity: 0.82;
+}
+
+.secondary {
+  margin-top: 13px;
+  color: inherit;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  opacity: 0.65;
+}
+
+.rounds {
+  margin-top: 15px;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  opacity: 0.8;
+}
+
+.primary {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+  padding: 0 19px;
+  border: 1px solid var(--text);
+  border-radius: 9px;
+  background: var(--text);
+  color: var(--page);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: opacity 140ms ease;
+}
+
+.primary:hover {
+  opacity: 0.82;
+}
+
+.board {
+  display: grid;
+  width: min(340px, calc(100vw - 50px));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(8px, 2vw, 12px);
+  margin: 22px auto 0;
+}
+
+.tile {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--border-strong);
+  border-radius: 11px;
+  background: var(--surface-hover);
+  cursor: pointer;
+  transition: background-color 90ms linear, transform 90ms ease;
+  touch-action: manipulation;
+}
+
+.tile[data-lit="true"] {
+  background: var(--text);
+  border-color: var(--text);
+  transform: scale(0.96);
+}
+
+.tile:disabled {
+  cursor: default;
+}
+
+.tile:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+.aimBoard {
+  position: absolute;
+  inset: 0;
+  touch-action: manipulation;
+  cursor: crosshair;
+}
+
+.target {
+  position: absolute;
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  border: 2px solid var(--text);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  transform: translate(-50%, -50%);
+  cursor: crosshair;
+  touch-action: manipulation;
+}
+
+.target::after {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--text);
+  content: "";
+}
+
+.target:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 4px;
+}
+
+.aimHud {
+  position: absolute;
+  top: 23px;
+  left: 0;
+  right: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+@media (max-width: 650px) {
+  .panel {
+    min-height: 380px;
+    padding: 30px 15px;
+  }
+
+  .symbol {
+    margin-bottom: 18px;
+  }
+
+  .board {
+    width: min(292px, calc(100vw - 40px));
+  }
+
+  .target {
+    width: 52px;
+    height: 52px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary,
+  .tile {
+    transition: none;
+  }
+}

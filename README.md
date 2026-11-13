@@ -1,6 +1,6 @@
 # MindBenchmark
 
-Fast browser-based brain games built with React, TypeScript and Cloudflare Pages.
+Fast browser brain games built with React, TypeScript and Cloudflare Pages.
 
 ## Development
 
@@ -19,6 +19,6 @@ npm test
 npm run build
 ```
 
-The build enforces a compressed bundle size budget. Cloudflare Pages deploys `dist` from the `main` branch. Static assets are cached long term using content-hashed filenames, while Pages Functions handle API requests.
+Reaction Time, Sequence Memory and Aim Trainer are playable. Results are kept locally in the browser. Other games, accounts and multiplayer are still in development.
 
-Games, rankings and accounts are still in development.
+The site deploys `dist` from `main` to Cloudflare Pages. Game modules load only when needed.
