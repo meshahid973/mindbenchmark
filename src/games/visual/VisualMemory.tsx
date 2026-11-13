@@ -5,6 +5,7 @@ import stage from "../components/Stage.module.css";
 import styles from "../components/ExtraGames.module.css";
 import { visualPattern } from "../core/challenges";
 import { saveScore } from "../core/scores";
+import { useGameInterruption } from "../core/useGameInterruption";
 
 type Phase = "ready" | "showing" | "input" | "passed" | "finished";
 const maximumLevel = 15;
@@ -31,29 +32,21 @@ export default function VisualMemory() {
     timer.current = null;
   }, []);
 
-  useEffect(() => {
-    function resetIfInterrupted() {
-      if (phaseRef.current !== "showing" && phaseRef.current !== "input") return;
-      clearTimer();
-      phaseRef.current = "ready";
-      chosen.current.clear();
-      missedRef.current.clear();
-      setMissed([]);
-      setPhase("ready");
-      setLevel(1);
-      setLives(3);
-      setSelected([]);
-      setCompleted(0);
-    }
-    function onVisibilityChange() { if (document.hidden) resetIfInterrupted(); }
-    document.addEventListener("visibilitychange", onVisibilityChange);
-    window.addEventListener("blur", resetIfInterrupted);
-    return () => {
-      document.removeEventListener("visibilitychange", onVisibilityChange);
-      window.removeEventListener("blur", resetIfInterrupted);
-      clearTimer();
-    };
-  }, [clearTimer]);
+  useGameInterruption(() => {
+    if (phaseRef.current !== "showing" && phaseRef.current !== "input") return;
+    clearTimer();
+    phaseRef.current = "ready";
+    chosen.current.clear();
+    missedRef.current.clear();
+    setMissed([]);
+    setPhase("ready");
+    setLevel(1);
+    setLives(3);
+    setSelected([]);
+    setCompleted(0);
+  });
+
+  useEffect(() => () => clearTimer(), [clearTimer]);
 
   function startLevel(nextLevel: number) {
     clearTimer();

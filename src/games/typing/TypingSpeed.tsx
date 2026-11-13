@@ -6,6 +6,7 @@ import styles from "../components/ExtraGames.module.css";
 import { correctCharacters, typingPassage, wordsPerMinute } from "../core/challenges";
 import { saveScore } from "../core/scores";
 import { inputTimestamp } from "../core/timing";
+import { useGameInterruption } from "../core/useGameInterruption";
 
 type Phase = "ready" | "typing" | "running" | "finished";
 const durationMs = 30000;
@@ -55,27 +56,18 @@ export default function TypingSpeed() {
         const remaining = Math.ceil((durationMs - elapsed) / 1000);
         setSeconds((previous) => previous === remaining ? previous : remaining);
       }
-    }, 100);
+    }, 250);
     return () => window.clearInterval(tick);
   }, [phase, finish]);
 
-  useEffect(() => {
-    function reset() {
-      if (phaseRef.current !== "running" && phaseRef.current !== "typing") return;
-      phaseRef.current = "ready";
-      setPhase("ready");
-      setTyped("");
-      typedRef.current = "";
-      setSeconds(30);
-    }
-    function onVisibilityChange() { if (document.hidden) reset(); }
-    document.addEventListener("visibilitychange", onVisibilityChange);
-    window.addEventListener("blur", reset);
-    return () => {
-      document.removeEventListener("visibilitychange", onVisibilityChange);
-      window.removeEventListener("blur", reset);
-    };
-  }, []);
+  useGameInterruption(() => {
+    if (phaseRef.current !== "running" && phaseRef.current !== "typing") return;
+    phaseRef.current = "ready";
+    setPhase("ready");
+    setTyped("");
+    typedRef.current = "";
+    setSeconds(30);
+  });
 
   function start() {
     const next = typingPassage();
@@ -92,10 +84,14 @@ export default function TypingSpeed() {
 
   function update(value: string, stamp: number) {
     if (phaseRef.current !== "typing" && phaseRef.current !== "running") return;
+    const time = inputTimestamp(stamp, performance.now());
+    if (phaseRef.current === "running" && time - startedAt.current >= durationMs) {
+      finish(startedAt.current + durationMs);
+      return;
+    }
     const next = value.slice(0, passageRef.current.length);
     typedRef.current = next;
     setTyped(next);
-    const time = inputTimestamp(stamp, performance.now());
 
     if (phaseRef.current === "typing" && next.length > 0) {
       phaseRef.current = "running";

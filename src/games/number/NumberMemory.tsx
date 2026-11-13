@@ -5,6 +5,7 @@ import stage from "../components/Stage.module.css";
 import styles from "../components/ExtraGames.module.css";
 import { randomDigits } from "../core/challenges";
 import { saveScore } from "../core/scores";
+import { useGameInterruption } from "../core/useGameInterruption";
 
 type Phase = "ready" | "show" | "answer" | "correct" | "failed" | "finished";
 const maximumDigits = 64;
@@ -28,25 +29,17 @@ export default function NumberMemory() {
     timer.current = null;
   }, []);
 
-  useEffect(() => {
-    const reset = () => {
-      if (phaseRef.current !== "show" && phaseRef.current !== "answer") return;
-      clear();
-      phaseRef.current = "ready";
-      setLevel(1);
-      setPhase("ready");
-      setAnswer("");
-      setDigits("");
-    };
-    const onVisibility = () => { if (document.hidden) reset(); };
-    document.addEventListener("visibilitychange", onVisibility);
-    window.addEventListener("blur", reset);
-    return () => {
-      document.removeEventListener("visibilitychange", onVisibility);
-      window.removeEventListener("blur", reset);
-      clear();
-    };
-  }, [clear]);
+  useGameInterruption(() => {
+    if (phaseRef.current !== "show" && phaseRef.current !== "answer") return;
+    clear();
+    phaseRef.current = "ready";
+    setLevel(1);
+    setPhase("ready");
+    setAnswer("");
+    setDigits("");
+  });
+
+  useEffect(() => () => clear(), [clear]);
 
   function showNumber(nextLevel: number) {
     clear();

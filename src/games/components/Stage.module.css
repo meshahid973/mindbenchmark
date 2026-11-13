@@ -206,3 +206,32 @@
     transition: none;
   }
 }
+
+.modeChoice {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.modeChoice button {
+  min-height: 42px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.modeChoice button[aria-pressed="true"] {
+  border-color: var(--text);
+  background: var(--surface-hover);
+  color: var(--text);
+}

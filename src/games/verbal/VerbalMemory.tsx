@@ -5,6 +5,7 @@ import stage from "../components/Stage.module.css";
 import styles from "../components/ExtraGames.module.css";
 import { chooseVerbalWord } from "../core/challenges";
 import { saveScore } from "../core/scores";
+import { useGameInterruption } from "../core/useGameInterruption";
 
 type Round = {
   mode: "ready" | "playing" | "finished";
@@ -27,6 +28,13 @@ export default function VerbalMemory() {
   const current = useRef<Round>(ready);
   const seen = useRef(new Set<string>());
   const [revision, setRevision] = useState(0);
+
+  useGameInterruption(() => {
+    if (current.current.mode !== "playing") return;
+    current.current = ready;
+    seen.current = new Set();
+    setRound(ready);
+  });
 
   function start() {
     seen.current = new Set();
