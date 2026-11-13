@@ -19,6 +19,6 @@ npm test
 npm run build
 ```
 
-Reaction Time, Sequence Memory and Aim Trainer are playable. Results are kept locally in the browser. Other games, accounts and multiplayer are still in development.
+Reaction Time, Sequence Memory and Aim Trainer are playable. Results are saved locally in the browser. Other games, accounts and multiplayer are still in development.
 
-The site deploys `dist` from `main` to Cloudflare Pages. Game modules load only when needed.
+The site deploys `dist` from `main` to Cloudflare Pages. Game modules load only when needed. There is no server API yet.
