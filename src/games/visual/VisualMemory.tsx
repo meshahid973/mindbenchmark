@@ -106,10 +106,11 @@ export default function VisualMemory() {
     <GameShell
       game="visual-memory"
       revision={revision}
+      active={phase === "showing" || phase === "input"}
       howTo="Remember the highlighted squares and select them after they disappear. You have three lives."
       stage={
         <div className={stage.panel}>
-          <Eye className={stage.symbol} size={46} strokeWidth={1.6} aria-hidden="true" />
+          {phase !== "showing" && phase !== "input" && <Eye className={stage.symbol} size={46} strokeWidth={1.6} aria-hidden="true" />}
           {(phase === "ready" || phase === "finished" || phase === "passed") ? (
             <>
               <h1 className={stage.title}>

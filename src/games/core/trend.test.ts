@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { makeScoreTrend } from "./trend";
+import { makeScoreTrend, scoreImprovement } from "./trend";
 
 describe("score graphs", () => {
   it("shows identical scores as a flat line in the middle", () => {
@@ -23,5 +23,13 @@ describe("score graphs", () => {
   it("handles empty and single-run history safely", () => {
     expect(makeScoreTrend([])).toEqual({ points: [], low: 0, high: 0 });
     expect(makeScoreTrend([10]).points).toEqual([{ x: 8, y: 26 }]);
+  });
+
+  it("compares scores in the correct direction without rounding", () => {
+    expect(scoreImprovement(210, 230, true)).toBe(20);
+    expect(scoreImprovement(250, 230, true)).toBe(-20);
+    expect(scoreImprovement(120, 95, false)).toBe(25);
+    expect(scoreImprovement(95, 120, false)).toBe(-25);
+    expect(scoreImprovement(10, 10, true)).toBe(0);
   });
 });

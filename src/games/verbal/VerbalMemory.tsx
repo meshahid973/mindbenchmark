@@ -71,6 +71,7 @@ export default function VerbalMemory() {
     <GameShell
       game="verbal-memory"
       revision={revision}
+      active={round.mode === "playing"}
       howTo="Choose Seen if the word appeared earlier in this run, otherwise choose New. Three mistakes end the run."
       stage={
         <div className={stage.panel}>

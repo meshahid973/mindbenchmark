@@ -85,6 +85,7 @@ export default function NumberMemory() {
     <GameShell
       game="number-memory"
       revision={revision}
+      active={phase === "show" || phase === "answer"}
       howTo="Memorize each number, then type it after it disappears. Every correct answer adds one digit."
       stage={
         <div className={stage.panel}>

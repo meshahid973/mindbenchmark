@@ -7,11 +7,14 @@ describe("game shell", () => {
     const html = renderToStaticMarkup(
       <GameShell
         game="reaction-time"
+        active
         stage={<button type="button">Start</button>}
         howTo="Click when the cue changes."
       />,
     );
     expect(html).toContain("Game area");
+    expect(html).toContain('data-playing="true"');
+    expect(html).toContain('aria-hidden="true"');
     expect(html).toContain("Your results");
     expect(html).toContain("Click when the cue changes.");
     expect(html).toContain("Start");
