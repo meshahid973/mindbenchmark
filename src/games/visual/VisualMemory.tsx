@@ -151,7 +151,7 @@ export default function VisualMemory() {
         label="Adaptive practice"
         description={adaptive ? "Unscored · match a pattern, then adjust difficulty." : "Off by default · standard scores stay separate."}
         lesson={{ title: "Learn visual chunking", body: <>Look for small <strong>lines, corners and L-shapes</strong>, rather than memorizing every square separately.</> }}
-        feedback={adaptiveSummary(progress)} />
+        feedback={adaptiveSummary(progress)} />}
       howTo="Remember the highlighted squares and select them after they disappear. You have three lives."
       stage={
         <div className={stage.panel}>
