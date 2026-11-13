@@ -2,10 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   nextSequence,
   nextTarget,
-  oppositeColor,
   randomInt,
   reactionDelay,
-  waitingColor,
 } from "./random";
 
 describe("game randomness", () => {
@@ -13,12 +11,6 @@ describe("game randomness", () => {
     const delays = Array.from({ length: 250 }, () => reactionDelay());
     expect(delays.every((delay) => delay >= 1200 && delay <= 7800)).toBe(true);
     expect(new Set(delays).size).toBeGreaterThan(200);
-  });
-
-  it("supports either direction of the reaction cue", () => {
-    expect(oppositeColor("red")).toBe("green");
-    expect(oppositeColor("green")).toBe("red");
-    expect(["red", "green"]).toContain(waitingColor());
   });
 
   it("rejects invalid random boundaries", () => {

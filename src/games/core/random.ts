@@ -22,19 +22,9 @@ export function randomInt(min: number, max: number): number {
   return min + (value[0] % range);
 }
 
-export type SignalColor = "red" | "green";
-
 export function reactionDelay(): number {
   // A fresh, millisecond-granularity delay between 1.2 and 7.8 seconds.
   return randomInt(1200, 7800);
-}
-
-export function waitingColor(): SignalColor {
-  return randomInt(0, 1) === 0 ? "red" : "green";
-}
-
-export function oppositeColor(color: SignalColor): SignalColor {
-  return color === "red" ? "green" : "red";
 }
 
 export function nextSequence(sequence: readonly number[]): number[] {

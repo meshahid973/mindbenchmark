@@ -136,9 +136,14 @@
   outline-offset: 3px;
 }
 
-.aimBoard {
-  position: absolute;
-  inset: 0;
+.aimArena {
+  position: relative;
+  width: min(740px, calc(100vw - 40px));
+  height: clamp(280px, 36vw, 370px);
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  background: var(--surface);
   touch-action: manipulation;
   cursor: crosshair;
 }

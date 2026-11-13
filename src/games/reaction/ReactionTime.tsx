@@ -1,49 +1,56 @@
-import { AlertCircle, CircleDot, Ellipsis, Zap } from "lucide-react";
+import { Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { GameShell } from "../components/GameShell";
 import styles from "../components/Stage.module.css";
-import { oppositeColor, reactionDelay, waitingColor, type SignalColor } from "../core/random";
+import { reactionDelay } from "../core/random";
 import { median, saveScore } from "../core/scores";
+import {
+  elapsedMilliseconds,
+  inputTimestamp,
+  presentedAt,
+  reactionSignal,
+} from "../core/timing";
 
 type Phase = "ready" | "waiting" | "go" | "early" | "between" | "finished";
 const roundsRequired = 5;
 
 type Session = {
   phase: Phase;
-  color: SignalColor;
   trials: number[];
   startedAt: number;
   timer: number | null;
   frame: number | null;
+  paintFrame: number | null;
 };
 
 function stopTimer(session: Session) {
   if (session.timer !== null) window.clearTimeout(session.timer);
   if (session.frame !== null) window.cancelAnimationFrame(session.frame);
+  if (session.paintFrame !== null) window.cancelAnimationFrame(session.paintFrame);
   session.timer = null;
   session.frame = null;
+  session.paintFrame = null;
 }
 
 export default function ReactionTime() {
   const session = useRef<Session>({
     phase: "ready",
-    color: "red",
     trials: [],
     startedAt: 0,
     timer: null,
     frame: null,
+    paintFrame: null,
   });
 
   const [phase, setPhase] = useState<Phase>("ready");
-  const [color, setColor] = useState<SignalColor>("red");
   const [times, setTimes] = useState<number[]>([]);
   const [revision, setRevision] = useState(0);
 
   useEffect(() => {
-    function onVisibilityChange() {
+    function resetIfInterrupted() {
       const current = session.current;
-      if (!document.hidden || (current.phase !== "waiting" && current.phase !== "go")) return;
+      if (current.phase !== "waiting" && current.phase !== "go") return;
       stopTimer(current);
       current.phase = "ready";
       current.trials = [];
@@ -51,9 +58,15 @@ export default function ReactionTime() {
       setPhase("ready");
     }
 
+    function onVisibilityChange() {
+      if (document.hidden) resetIfInterrupted();
+    }
+
     document.addEventListener("visibilitychange", onVisibilityChange);
+    window.addEventListener("blur", resetIfInterrupted);
     return () => {
       document.removeEventListener("visibilitychange", onVisibilityChange);
+      window.removeEventListener("blur", resetIfInterrupted);
       stopTimer(session.current);
     };
   }, []);
@@ -66,10 +79,7 @@ export default function ReactionTime() {
       setTimes([]);
     }
 
-    const nextColor = waitingColor();
-    current.color = nextColor;
     current.phase = "waiting";
-    setColor(nextColor);
     setPhase("waiting");
 
     current.timer = window.setTimeout(() => {
@@ -78,12 +88,20 @@ export default function ReactionTime() {
         current.frame = null;
         if (current.phase !== "waiting") return;
 
-        // Commit the visible color change before starting the monotonic timer.
         flushSync(() => {
           current.phase = "go";
           setPhase("go");
         });
+
+        // The next frame is a closer approximation of when green first appeared.
+        // No arbitrary device-latency correction is subtracted.
         current.startedAt = performance.now();
+        current.paintFrame = window.requestAnimationFrame((frameTime) => {
+          current.paintFrame = null;
+          if (current.phase === "go") {
+            current.startedAt = presentedAt(current.startedAt, frameTime);
+          }
+        });
       });
     }, reactionDelay());
   }
@@ -91,7 +109,12 @@ export default function ReactionTime() {
   function respond(pressedAt: number) {
     const current = session.current;
 
-    if (current.phase === "ready" || current.phase === "early" || current.phase === "between" || current.phase === "finished") {
+    if (
+      current.phase === "ready" ||
+      current.phase === "early" ||
+      current.phase === "between" ||
+      current.phase === "finished"
+    ) {
       startRound();
       return;
     }
@@ -105,8 +128,17 @@ export default function ReactionTime() {
 
     if (current.phase !== "go") return;
 
-    const elapsed = Math.max(0, Math.round(pressedAt - current.startedAt));
-    current.trials = [...current.trials, elapsed];
+    // A press queued before green must not become a zero-millisecond result.
+    const elapsed = elapsedMilliseconds(current.startedAt, pressedAt);
+    if (elapsed === null) {
+      stopTimer(current);
+      current.phase = "early";
+      setPhase("early");
+      return;
+    }
+
+    stopTimer(current);
+    current.trials = [...current.trials, Math.round(elapsed)];
     setTimes(current.trials);
 
     if (current.trials.length === roundsRequired) {
@@ -120,60 +152,52 @@ export default function ReactionTime() {
     }
   }
 
-  const signal = phase === "waiting" ? color : phase === "go" ? oppositeColor(color) : undefined;
+  const signal = phase === "waiting" || phase === "go" ? reactionSignal(phase) : undefined;
   const lastTime = times.at(-1);
   const bestRun = times.length === roundsRequired ? Math.round(median(times)) : null;
 
   const heading = phase === "ready" ? "Reaction Time"
-    : phase === "waiting" ? "Wait for the change"
-    : phase === "go" ? "CLICK!"
+    : phase === "waiting" ? "Wait for green"
+    : phase === "go" ? "Click!"
     : phase === "early" ? "Too soon!"
     : phase === "finished" ? `${bestRun} ms`
     : `${lastTime} ms`;
 
-  const message = phase === "ready" ? "Tap or press Space to start."
-    : phase === "waiting" ? "Don't click yet."
-    : phase === "go" ? "React now."
-    : phase === "early" ? "You clicked before the color changed."
-    : phase === "finished" ? "Median reaction time across five rounds."
-    : "Tap to start the next round.";
-
-  const Icon = phase === "waiting" ? Ellipsis : phase === "go" ? CircleDot : phase === "early" ? AlertCircle : Zap;
+  const message = phase === "ready" ? "Click to start"
+    : phase === "early" ? "Click to retry"
+    : phase === "finished" ? "Click to restart"
+    : phase === "between" ? "Click to continue"
+    : null;
 
   return (
     <GameShell
       game="reaction-time"
       revision={revision}
-      howTo="Wait until the screen changes color, then react as quickly as you can. The wait is different every round, and either color can be the signal. Five valid rounds make one score."
+      howTo="Click when red turns green. Five rounds."
       stage={
-        <div
-          className={styles.panel}
-          data-signal={signal}
-        >
+        <div className={styles.panel} data-signal={signal}>
           <button
             type="button"
             className={styles.fillAction}
-            aria-label={`${heading}. ${message}`}
+            aria-label={message ? `${heading}. ${message}` : heading}
             onPointerDown={(event) => {
               if (event.pointerType === "mouse" && event.button !== 0) return;
-              respond(performance.now());
+              respond(inputTimestamp(event.timeStamp, performance.now()));
             }}
             onKeyDown={(event) => {
               if (event.repeat || (event.key !== " " && event.key !== "Enter")) return;
               event.preventDefault();
-              respond(performance.now());
+              respond(inputTimestamp(event.timeStamp, performance.now()));
             }}
           />
-          <Icon className={styles.symbol} size={55} strokeWidth={1.8} aria-hidden="true" />
-          <h1 className={styles.title}>{heading}</h1>
-          <span className={styles.message} aria-live="polite">{message}</span>
-          {phase === "waiting" && <span className={styles.secondary}>Early clicks don't count.</span>}
-          {phase === "early" && <span className={styles.secondary}>Tap to retry.</span>}
-          {phase === "finished" && <span className={styles.secondary}>Tap to play again.</span>}
-          {(phase === "between" || phase === "waiting" || phase === "go") && (
-            <span className={styles.rounds}>Round {times.length + 1} / {roundsRequired}</span>
+          {phase === "ready" && (
+            <Zap className={styles.symbol} size={55} strokeWidth={1.8} aria-hidden="true" />
           )}
-          {phase === "finished" && <span className={styles.rounds}>{times.join(" · ")} ms</span>}
+          <h1 className={styles.title}>{heading}</h1>
+          {message && <p className={styles.message}>{message}</p>}
+          {phase === "between" && (
+            <span className={styles.rounds}>{times.length} / {roundsRequired}</span>
+          )}
         </div>
       }
     />

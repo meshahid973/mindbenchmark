@@ -38,12 +38,6 @@
   line-height: 1.7;
 }
 
-.card .note {
-  margin-top: 13px;
-  font-size: 0.77rem;
-  line-height: 1.6;
-}
-
 .stat {
   display: flex;
   flex-direction: column;
