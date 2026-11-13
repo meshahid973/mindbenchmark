@@ -1,8 +1,8 @@
 # MindBenchmark
 
-Minimal browser brain games built with React, TypeScript and Vite.
+Fast browser-based brain games built with React, TypeScript and Cloudflare Pages.
 
-## Local development
+## Development
 
 Use Node.js 22.23 or later.
 
@@ -15,19 +15,10 @@ npm run dev
 
 ```bash
 npm run lint
-npm run typecheck
 npm test
 npm run build
 ```
 
-## Cloudflare Pages
+The build enforces a compressed bundle size budget. Cloudflare Pages deploys `dist` from the `main` branch. Static assets are cached long term using content-hashed filenames, while Pages Functions handle API requests.
 
-Connect the `main` branch of this repository to Cloudflare Pages with these settings:
-
-- Build command: `npm run build`
-- Build output: `dist`
-- Root directory: `/`
-
-Pages serves React routes automatically. `/api/health` is a Pages Function.
-
-Gameplay and multiplayer are still in development. Deploying the frontend does not create a multiplayer backend.
+Games, rankings and accounts are still in development.
