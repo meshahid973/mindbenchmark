@@ -60,14 +60,6 @@
   opacity: 0.82;
 }
 
-.secondary {
-  margin-top: 13px;
-  color: inherit;
-  font-size: 0.82rem;
-  line-height: 1.5;
-  opacity: 0.65;
-}
-
 .rounds {
   margin-top: 15px;
   font-variant-numeric: tabular-nums;

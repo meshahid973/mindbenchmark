@@ -64,6 +64,10 @@ describe("game challenges", () => {
     expect(wordsPerMinute(200, 30000)).toBe(80);
     expect(wordsPerMinute(10, 0)).toBe(0);
     const passage = typingPassage(95);
-    expect(passage.split(" ")).toHaveLength(95);
+    const words = passage.split(" ");
+    expect(words).toHaveLength(95);
+    for (let index = 1; index < words.length; index += 1) {
+      expect(words[index]).not.toBe(words[index - 1]);
+    }
   });
 });

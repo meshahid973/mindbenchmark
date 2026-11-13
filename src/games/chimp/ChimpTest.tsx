@@ -69,6 +69,7 @@ export default function ChimpTest() {
   function clickCell(index: number) {
     if (modeRef.current !== "playing") return;
     const expected = nextRef.current;
+    if (board[index] === 0) return;
     if (board[index] !== expected) {
       const remaining = lives - 1;
       if (remaining === 0) {
@@ -112,9 +113,10 @@ export default function ChimpTest() {
                     type="button"
                     className={styles.chimpTile}
                     data-visible={!hidden && board[cell] > 0}
+                    data-empty={board[cell] === 0}
                     data-cleared={cleared.includes(cell)}
                     aria-label={!hidden && board[cell] > 0 ? `Number ${board[cell]}` : `Cell ${cell + 1}`}
-                    disabled={cleared.includes(cell)}
+                    disabled={board[cell] === 0 || cleared.includes(cell)}
                     onClick={() => clickCell(cell)}
                   >
                     {!hidden && board[cell] > 0 ? board[cell] : ""}
