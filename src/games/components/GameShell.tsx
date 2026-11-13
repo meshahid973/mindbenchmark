@@ -21,7 +21,7 @@ export function GameShell({
       </section>
 
       <section className={styles.details} aria-label="Game information">
-        <ScorePanel game={game} revision={revision} />
+        <ScorePanel key={`${game}:${revision}`} game={game} />
         <article className={styles.card}>
           <h2>How it works</h2>
           <p>{howTo}</p>

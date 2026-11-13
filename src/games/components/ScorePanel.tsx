@@ -1,13 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { bestScore, readScores, type ScoreEntry, type ScoredGame } from "../core/scores";
 import styles from "./GameShell.module.css";
 
-export function ScorePanel({ game, revision }: { game: ScoredGame; revision: number }) {
-  const [history, setHistory] = useState<ScoreEntry[]>([]);
-
-  useEffect(() => {
-    setHistory(readScores(game));
-  }, [game, revision]);
+export function ScorePanel({ game }: { game: ScoredGame }) {
+  const [history] = useState<ScoreEntry[]>(() => readScores(game));
 
   const best = bestScore(game, history);
   const unit = game === "sequence-memory" ? "levels" : "ms";

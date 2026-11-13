@@ -161,7 +161,7 @@ export default function ReactionTime() {
           }}
         >
           <Icon className={styles.symbol} size={55} strokeWidth={1.8} aria-hidden="true" />
-          <h1 className={styles.title}>{heading}</h1>
+          <span className={styles.title} role="heading" aria-level={1}>{heading}</span>
           <span className={styles.message} aria-live="polite">{message}</span>
           {phase === "waiting" && <span className={styles.secondary}>Early clicks don't count.</span>}
           {phase === "early" && <span className={styles.secondary}>Tap to retry.</span>}

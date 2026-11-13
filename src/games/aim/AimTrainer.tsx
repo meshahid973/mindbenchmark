@@ -96,7 +96,6 @@ export default function AimTrainer() {
               onPointerDown={(event) => {
                 if (event.pointerType !== "mouse" || event.button === 0) miss();
               }}
-              aria-label="Aim training area"
             >
               <span className={styles.aimHud} role="status">
                 {hits} / {targetCount} hits · {misses} misses

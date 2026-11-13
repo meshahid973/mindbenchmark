@@ -1,11 +1,12 @@
 import { Grid2X2, RotateCcw } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { GameShell } from "../components/GameShell";
 import styles from "../components/Stage.module.css";
 import { nextSequence } from "../core/random";
 import { saveScore } from "../core/scores";
 
 type Mode = "ready" | "showing" | "input" | "levelup" | "failed";
+const tiles = [0, 1, 2, 3, 4, 5, 6, 7, 8] as const;
 
 export default function SequenceMemory() {
   const modeRef = useRef<Mode>("ready");
@@ -18,10 +19,10 @@ export default function SequenceMemory() {
   const [completed, setCompleted] = useState(0);
   const [revision, setRevision] = useState(0);
 
-  function cancelPlayback() {
+  const cancelPlayback = useCallback(() => {
     for (const timer of timers.current) window.clearTimeout(timer);
     timers.current = [];
-  }
+  }, []);
 
   function schedule(callback: () => void, delay: number) {
     timers.current.push(window.setTimeout(callback, delay));
@@ -44,7 +45,7 @@ export default function SequenceMemory() {
       document.removeEventListener("visibilitychange", onVisibilityChange);
       cancelPlayback();
     };
-  }, []);
+  }, [cancelPlayback]);
 
   function playSequence(sequence: number[], newLevel: number) {
     cancelPlayback();
@@ -134,19 +135,19 @@ export default function SequenceMemory() {
               {mode === "failed" ? "Try again" : "Start"}
             </button>
           ) : (
-            <div className={styles.board} role="group" aria-label="Memory tiles">
-              {Array.from({ length: 9 }, (_, index) => (
+            <fieldset className={styles.board} aria-label="Memory tiles">
+              {tiles.map((tile) => (
                 <button
-                  key={index}
+                  key={tile}
                   type="button"
                   className={styles.tile}
-                  data-lit={lit === index}
-                  aria-label={`Tile ${index + 1}`}
+                  data-lit={lit === tile}
+                  aria-label={`Tile ${tile + 1}`}
                   disabled={mode !== "input"}
-                  onClick={() => pressTile(index)}
+                  onClick={() => pressTile(tile)}
                 />
               ))}
-            </div>
+            </fieldset>
           )}
         </div>
       }
