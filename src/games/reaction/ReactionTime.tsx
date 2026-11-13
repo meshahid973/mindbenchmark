@@ -175,6 +175,7 @@ export default function ReactionTime() {
     <GameShell
       game="reaction-time"
       revision={revision}
+      active={phase === "waiting" || phase === "go"}
       howTo="Click when red turns green. Five rounds."
       stage={
         <div className={styles.panel} data-signal={signal}>

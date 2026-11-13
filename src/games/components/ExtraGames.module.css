@@ -93,7 +93,7 @@
 .chimpGrid,
 .visualGrid {
   display: grid;
-  width: min(435px, calc(100vw - 38px));
+  width: min(350px, calc(100vw - 38px));
   gap: clamp(5px, 1.2vw, 8px);
   margin: 24px auto 0;
   padding: 0;
@@ -121,7 +121,8 @@
   font-size: clamp(0.83rem, 1.8vw, 1.3rem);
   font-variant-numeric: tabular-nums;
   cursor: pointer;
-  touch-action: manipulation;
+  touch-action: none;
+  transition: background-color 85ms linear, border-color 85ms linear;
 }
 
 .chimpTile[data-visible="true"],
@@ -149,7 +150,7 @@
 }
 
 .visualGrid {
-  width: min(365px, calc(100vw - 38px));
+  width: min(330px, calc(100vw - 38px));
 }
 
 .visualTile:disabled {
@@ -189,7 +190,7 @@
 
 @media (max-width: 550px) {
   .chimpGrid {
-    width: min(330px, calc(100vw - 36px));
+    width: min(304px, calc(100vw - 36px));
     gap: 5px;
   }
 
@@ -199,5 +200,12 @@
 
   .typingPassage {
     max-height: 125px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chimpTile,
+  .visualTile {
+    transition: none;
   }
 }

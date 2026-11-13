@@ -8,19 +8,25 @@ export function GameShell({
   game,
   howTo,
   revision = 0,
+  active = false,
 }: {
   stage: ReactNode;
   game: ScoredGame;
   howTo: string;
   revision?: number;
+  active?: boolean;
 }) {
   return (
     <div className={styles.page}>
-      <section className={styles.hero} aria-label="Game area">
+      <section className={styles.hero} data-game={game} aria-label="Game area">
         {stage}
       </section>
-
-      <section className={styles.details} aria-label="Game information">
+      <section
+        className={styles.details}
+        data-playing={active}
+        aria-hidden={active}
+        aria-label="Game information"
+      >
         <ScorePanel key={`${game}:${revision}`} game={game} />
         <article className={styles.card}>
           <h2>How it works</h2>

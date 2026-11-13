@@ -5,6 +5,10 @@ export type ScoreTrendData = {
   high: number;
 };
 
+export function scoreImprovement(current: number, previous: number, lowerIsBetter: boolean): number {
+  return lowerIsBetter ? previous - current : current - previous;
+}
+
 export function makeScoreTrend(values: readonly number[]): ScoreTrendData {
   if (!values.length) return { points: [], low: 0, high: 0 };
 

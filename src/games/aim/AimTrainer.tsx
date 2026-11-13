@@ -105,6 +105,7 @@ export default function AimTrainer() {
     <GameShell
       game="aim-trainer"
       revision={revision}
+      active={mode === "playing"}
       howTo="Hit each target as quickly as possible. The standard test uses 30 targets. Quick mode is practice and does not save scores."
       stage={
         <div className={styles.panel}>

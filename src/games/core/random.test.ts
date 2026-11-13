@@ -30,11 +30,11 @@ describe("game randomness", () => {
 
   it("keeps aim targets within the board", () => {
     const targets = Array.from({ length: 100 }, () => nextTarget());
-    expect(targets.every(({ x, y }) => x >= 10 && x <= 90 && y >= 20 && y <= 80)).toBe(true);
+    expect(targets.every(({ x, y }) => x >= 12 && x <= 88 && y >= 20 && y <= 80)).toBe(true);
     const far = nextTarget({ x: 10, y: 20 });
     expect(Math.hypot(far.x - 10, far.y - 20)).toBeGreaterThanOrEqual(20);
     for (let index = 0; index < 300; index += 1) {
-      const previous = { x: randomInt(10, 90), y: randomInt(20, 80) };
+      const previous = { x: randomInt(12, 88), y: randomInt(20, 80) };
       const next = nextTarget(previous);
       expect(Math.hypot(next.x - previous.x, next.y - previous.y)).toBeGreaterThanOrEqual(20);
     }

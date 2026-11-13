@@ -120,11 +120,12 @@ export default function SequenceMemory() {
     <GameShell
       game="sequence-memory"
       revision={revision}
+      active={mode === "showing" || mode === "input" || mode === "levelup"}
       howTo="Watch the tiles light up and repeat the sequence in the same order. Each level adds one step. Finish as many levels as you can."
       stage={
         <div className={styles.panel}>
-          <Grid2X2 className={styles.symbol} size={48} strokeWidth={1.6} aria-hidden="true" />
-          <h1 className={styles.title}>{title}</h1>
+          {(mode === "ready" || mode === "failed") && <Grid2X2 className={styles.symbol} size={48} strokeWidth={1.6} aria-hidden="true" />}
+          <h1 className={mode === "ready" || mode === "failed" ? styles.title : styles.compactTitle}>{title}</h1>
           <p className={styles.message} role="status">{message}</p>
           {(mode === "showing" || mode === "input" || mode === "levelup") && (
             <span className={styles.rounds}>Level {level}</span>

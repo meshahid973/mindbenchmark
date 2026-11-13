@@ -88,10 +88,11 @@ export default function ChimpTest() {
     <GameShell
       game="chimp-test"
       revision={revision}
+      active={phase === "playing"}
       howTo="Click the numbers in order. They disappear after your first click. Three mistakes end the run."
       stage={
         <div className={stage.panel}>
-          <Puzzle className={stage.symbol} size={45} strokeWidth={1.6} aria-hidden="true" />
+          {phase !== "playing" && <Puzzle className={stage.symbol} size={45} strokeWidth={1.6} aria-hidden="true" />}
           {phase === "playing" ? (
             <>
               <div className={styles.stats}><span>{level} numbers</span><span>Lives {lives}</span></div>

@@ -17,6 +17,7 @@ export default function TypingSpeed() {
   const [phase, setPhase] = useState<Phase>("ready");
   const [passage, setPassage] = useState("");
   const [typed, setTyped] = useState("");
+  const [correct, setCorrect] = useState(0);
   const [seconds, setSeconds] = useState(30);
   const [result, setResult] = useState<Result>({ wpm: 0, accuracy: 0 });
   const [revision, setRevision] = useState(0);
@@ -25,6 +26,7 @@ export default function TypingSpeed() {
   const startedAt = useRef(0);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const typedRef = useRef("");
+  const correctRef = useRef(0);
   const passageRef = useRef("");
 
   const finish = useCallback((endedAt: number) => {
@@ -32,9 +34,9 @@ export default function TypingSpeed() {
     phaseRef.current = "finished";
     const elapsed = Math.min(durationMs, Math.max(1, endedAt - startedAt.current));
     const current = typedRef.current;
-    const correct = correctCharacters(current, passageRef.current);
-    const wpm = wordsPerMinute(correct, elapsed);
-    const accuracy = current.length ? Math.round((100 * correct) / current.length) : 0;
+    const correctCount = correctRef.current;
+    const wpm = wordsPerMinute(correctCount, elapsed);
+    const accuracy = current.length ? Math.round((100 * correctCount) / current.length) : 0;
     setResult({ wpm, accuracy });
     setSeconds(0);
     setPhase("finished");
@@ -66,6 +68,8 @@ export default function TypingSpeed() {
     setPhase("ready");
     setTyped("");
     typedRef.current = "";
+    correctRef.current = 0;
+    setCorrect(0);
     setSeconds(30);
   });
 
@@ -73,6 +77,8 @@ export default function TypingSpeed() {
     const next = typingPassage();
     passageRef.current = next;
     typedRef.current = "";
+    correctRef.current = 0;
+    setCorrect(0);
     startedAt.current = 0;
     phaseRef.current = "typing";
     setPassage(next);
@@ -90,8 +96,15 @@ export default function TypingSpeed() {
       return;
     }
     const next = value.slice(0, passageRef.current.length);
+    const previous = typedRef.current;
+    const correctCount = next.length === previous.length + 1 &&
+      next.slice(0, -1) === previous
+      ? correctRef.current + Number(next.at(-1) === passageRef.current[next.length - 1])
+      : correctCharacters(next, passageRef.current);
+    correctRef.current = correctCount;
     typedRef.current = next;
     setTyped(next);
+    setCorrect(correctCount);
 
     if (phaseRef.current === "typing" && next.length > 0) {
       phaseRef.current = "running";
@@ -123,7 +136,7 @@ export default function TypingSpeed() {
             <>
               <div className={styles.stats}>
                 <span>{seconds}s</span>
-                <span>{Math.round(100 * correctCharacters(typed, passage) / Math.max(1, typed.length))}% accuracy</span>
+                <span>{Math.round(100 * correct / Math.max(1, typed.length))}% accuracy</span>
               </div>
               <p className={styles.typingPassage}>
                 <span className={styles.typedCorrect}>{passage.slice(0, prefixLength)}</span>
