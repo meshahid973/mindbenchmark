@@ -3,9 +3,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { GameShell } from "../components/GameShell";
 import stage from "../components/Stage.module.css";
 import styles from "../components/ExtraGames.module.css";
+import { PracticePanel } from "../components/PracticePanel";
+import { advanceAdaptive, adaptiveSummary, initialAdaptive } from "../core/adaptive";
 import { randomDigits } from "../core/challenges";
 import { saveScore } from "../core/scores";
 import { useGameInterruption } from "../core/useGameInterruption";
+import { useTrainingSetting } from "../core/useTrainingSetting";
 
 type Phase = "ready" | "show" | "answer" | "correct" | "failed" | "finished";
 const maximumDigits = 64;
@@ -16,6 +19,9 @@ export default function NumberMemory() {
   const [digits, setDigits] = useState("");
   const [answer, setAnswer] = useState("");
   const [revision, setRevision] = useState(0);
+  const [adaptive, setAdaptive] = useTrainingSetting("adaptive-memory");
+  const training = useRef(initialAdaptive(3));
+  const [progress, setProgress] = useState(training.current);
   const timer = useRef<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const phaseRef = useRef<Phase>("ready");
@@ -37,6 +43,8 @@ export default function NumberMemory() {
     setPhase("ready");
     setAnswer("");
     setDigits("");
+    training.current = initialAdaptive(3);
+    setProgress(training.current);
   });
 
   useEffect(() => () => clear(), [clear]);
@@ -59,6 +67,15 @@ export default function NumberMemory() {
 
   function submitAnswer() {
     if (phaseRef.current !== "answer") return;
+    if (adaptive) {
+      const updated = advanceAdaptive(training.current, answer === digits, 1, 12);
+      training.current = updated;
+      setProgress(updated);
+      const next = answer === digits ? "correct" : "failed";
+      phaseRef.current = next;
+      setPhase(next);
+      return;
+    }
     if (answer === digits) {
       const next = level === maximumDigits ? "finished" : "correct";
       phaseRef.current = next;
@@ -75,6 +92,17 @@ export default function NumberMemory() {
     }
   }
 
+  function resetSetting(enabled: boolean) {
+    clear();
+    setAdaptive(enabled);
+    training.current = initialAdaptive(3);
+    setProgress(training.current);
+    phaseRef.current = "ready";
+    setPhase("ready");
+    setLevel(1);
+    setAnswer("");
+  }
+
   const startButton = (label: string, nextLevel: number) => (
     <button className={stage.primary} type="button" onClick={() => showNumber(nextLevel)}>
       {label}
@@ -86,6 +114,11 @@ export default function NumberMemory() {
       game="number-memory"
       revision={revision}
       active={phase === "show" || phase === "answer"}
+      practice={<PracticePanel enabled={adaptive} onChange={resetSetting}
+        label="Adaptive practice"
+        description={adaptive ? "Unscored · difficulty adjusts as you practice." : "Off by default · standard scores stay separate."}
+        lesson={{ title: "Learn number chunking", body: <>Group digits into small parts: <strong>572 · 814 · 639</strong> is easier to rehearse than 572814639. Recall the full number when answering.</> }}
+        feedback={adaptiveSummary(progress)} />}
       howTo="Memorize each number, then type it after it disappears. Every correct answer adds one digit."
       stage={
         <div className={stage.panel}>
@@ -98,7 +131,7 @@ export default function NumberMemory() {
               : phase === "finished" ? "Perfect"
               : "Not quite"}
           </h1>
-          {phase === "ready" && startButton("Start", 1)}
+          {phase === "ready" && startButton(adaptive ? "Start practice" : "Start", adaptive ? 3 : 1)}
           {phase === "show" && (
             <p className={styles.digits} aria-live="off">{digits}</p>
           )}
@@ -129,7 +162,7 @@ export default function NumberMemory() {
                   : phase === "failed" ? `Answer: ${digits}`
                   : `${maximumDigits} digits remembered`}
               </p>
-              {startButton(phase === "correct" ? "Next" : "Try again", phase === "correct" ? level + 1 : 1)}
+              {startButton(adaptive ? "Next practice" : phase === "correct" ? "Next" : "Try again", adaptive ? progress.level : phase === "correct" ? level + 1 : 1)}
             </>
           )}
           {(phase === "show" || phase === "answer") && (

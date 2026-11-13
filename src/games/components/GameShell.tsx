@@ -9,12 +9,14 @@ export function GameShell({
   howTo,
   revision = 0,
   active = false,
+  practice,
 }: {
   stage: ReactNode;
   game: ScoredGame;
   howTo: string;
   revision?: number;
   active?: boolean;
+  practice?: ReactNode;
 }) {
   return (
     <div className={styles.page}>
@@ -32,6 +34,7 @@ export function GameShell({
           <h2>How it works</h2>
           <p>{howTo}</p>
         </article>
+        {practice}
       </section>
     </div>
   );
