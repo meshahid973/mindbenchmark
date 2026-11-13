@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router";
 import type { Game } from "../app/games";
-import { isPlayableGame, prefetchGame } from "../games/loaders";
+import { prefetchGame } from "../games/loaders";
 import styles from "./GameCard.module.css";
 
 const icons: Record<Game["slug"], LucideIcon> = {
@@ -28,7 +28,6 @@ const icons: Record<Game["slug"], LucideIcon> = {
 
 export function GameCard({ game, detailed = false }: { game: Game; detailed?: boolean }) {
   const Icon = icons[game.slug];
-  const playable = isPlayableGame(game.slug);
 
   return (
     <Link
@@ -37,7 +36,6 @@ export function GameCard({ game, detailed = false }: { game: Game; detailed?: bo
       onPointerEnter={() => prefetchGame(game.slug)}
       onFocus={() => prefetchGame(game.slug)}
     >
-      {!playable && <span className={styles.soon}>Soon</span>}
       <span className={styles.icon} aria-hidden="true">
         <Icon size={32} strokeWidth={1.65} />
       </span>

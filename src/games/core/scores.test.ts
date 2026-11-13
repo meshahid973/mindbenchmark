@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { bestScore, median, readScores, saveScore } from "./scores";
+import { bestScore, lowerIsBetter, mean, median, readScores, saveScore, scoreUnits } from "./scores";
 
 const data = new Map<string, string>();
 const storage = {
@@ -13,7 +13,9 @@ afterEach(() => {
 });
 
 describe("score helpers", () => {
-  it("uses the median instead of the mean for reaction rounds", () => {
+  it("calculates the average and median independently", () => {
+    expect(mean([200, 210, 1000, 190, 220])).toBe(364);
+    expect(mean([])).toBe(0);
     expect(median([200, 210, 1000, 190, 220])).toBe(210);
     expect(median([100, 200])).toBe(150);
     expect(median([])).toBe(0);
@@ -34,6 +36,13 @@ describe("score helpers", () => {
     expect(bestScore("sequence-memory", history)).toBe(8);
     expect(bestScore("aim-trainer", history)).toBe(5);
     expect(bestScore("reaction-time", [])).toBeNull();
+    for (const game of ["number-memory", "verbal-memory", "chimp-test", "visual-memory", "typing-speed"] as const) {
+      expect(bestScore(game, history)).toBe(8);
+      expect(lowerIsBetter(game)).toBe(false);
+      expect(scoreUnits[game]).toBeTruthy();
+    }
+    expect(lowerIsBetter("reaction-time")).toBe(true);
+    expect(lowerIsBetter("aim-trainer")).toBe(true);
   });
 
   it("rejects malformed or impossible saved values safely", () => {

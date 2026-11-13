@@ -30,8 +30,12 @@ describe("app routes", () => {
     expect(html).not.toContain("In development");
   });
 
-  it("keeps planned games clearly marked as coming soon", () => {
-    expect(renderRoute("/games/number-memory")).toContain("Coming soon");
+  it("loads each game independently without a placeholder", () => {
+    for (const slug of ["number-memory", "verbal-memory", "chimp-test", "visual-memory", "typing-speed"]) {
+      const html = renderRoute(`/games/${slug}`);
+      expect(html).toContain("Loading game");
+      expect(html).not.toContain("Coming soon");
+    }
   });
 
   it("renders a clear missing-page state", () => {
