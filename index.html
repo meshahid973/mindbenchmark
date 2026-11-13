@@ -11,6 +11,7 @@
       try {
         if (localStorage.getItem("mindbenchmark-theme") === "light") {
           document.documentElement.dataset.theme = "light";
+          document.querySelector('meta[name="theme-color"]').setAttribute("content", "#f7f7f7");
         }
       } catch {}
     </script>

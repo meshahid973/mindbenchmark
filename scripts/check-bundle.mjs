@@ -1,5 +1,4 @@
 import { readFileSync, readdirSync } from "node:fs";
-import { join } from "node:path";
 import { gzipSync } from "node:zlib";
 
 const dist = new URL("../dist/", import.meta.url);

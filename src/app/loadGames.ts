@@ -2,5 +2,7 @@
 export const loadGames = () => import("../pages/Games");
 
 export function prefetchGames() {
-  void loadGames();
+  void loadGames().catch(() => {
+    // A navigation still handles a failed chunk request normally.
+  });
 }

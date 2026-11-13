@@ -20,7 +20,7 @@ export function App() {
     <div className="site-shell">
       <a className="skip-link" href="#content">Skip to content</a>
       <SiteHeader />
-      <main id="content">
+      <main id="content" tabIndex={-1}>
         <Suspense fallback={<p className="route-loading content-width" role="status">Loading…</p>}>
           <Routes>
             <Route path="/" element={<Home />} />
