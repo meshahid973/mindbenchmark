@@ -1,6 +1,7 @@
 import { Crosshair, RotateCcw } from "lucide-react";
 import { useRef, useState } from "react";
 import { flushSync } from "react-dom";
+import { GameAction } from "../components/GameAction";
 import { GameShell } from "../components/GameShell";
 import { PracticePanel } from "../components/PracticePanel";
 import styles from "../components/Stage.module.css";
@@ -154,6 +155,7 @@ export default function AimTrainer() {
     <GameShell
       game="aim-trainer"
       revision={revision}
+      progress={{ current: hits, total: mode === "ready" ? targetCount : runCount, label: mode === "finished" ? "Complete" : mode === "ready" ? "30-target standard" : `${hits} / ${runCount} targets` }}
       active={mode === "playing"}
       howTo="Hit each target as quickly as possible. Standard mode uses 30 targets; quick and coaching drills are unscored."
       practice={<PracticePanel enabled={coaching} onChange={setCoach}
@@ -225,10 +227,10 @@ export default function AimTrainer() {
                     onClick={() => setTargetCount(20)}>Quick · 20</button>
                 </fieldset>
               )}
-              <button className={styles.primary} type="button" onClick={start}>
+              <GameAction onClick={start}>
                 {mode === "finished" && <RotateCcw size={17} aria-hidden="true" />}
                 {mode === "finished" ? "Try again" : coaching ? "Start drill" : "Start"}
-              </button>
+              </GameAction>
             </>
           )}
         </div>

@@ -1,5 +1,6 @@
 import { BookOpen } from "lucide-react";
 import { useRef, useState } from "react";
+import { GameAction } from "../components/GameAction";
 import { GameShell } from "../components/GameShell";
 import stage from "../components/Stage.module.css";
 import styles from "../components/ExtraGames.module.css";
@@ -71,6 +72,7 @@ export default function VerbalMemory() {
     <GameShell
       game="verbal-memory"
       revision={revision}
+      progress={{ label: `Score ${round.score}` }}
       active={round.mode === "playing"}
       howTo="Choose Seen if the word appeared earlier in this run, otherwise choose New. Three mistakes end the run."
       stage={
@@ -93,9 +95,9 @@ export default function VerbalMemory() {
                 {round.mode === "finished" ? `${round.score} points` : "Verbal Memory"}
               </h1>
               {round.mode === "finished" && <p className={stage.message}>Run complete</p>}
-              <button className={stage.primary} type="button" onClick={start}>
+              <GameAction onClick={start}>
                 {round.mode === "finished" ? "Try again" : "Start"}
-              </button>
+              </GameAction>
             </>
           )}
         </div>

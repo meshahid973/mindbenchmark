@@ -1,5 +1,6 @@
 import { Hash } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { GameAction } from "../components/GameAction";
 import { GameShell } from "../components/GameShell";
 import stage from "../components/Stage.module.css";
 import styles from "../components/ExtraGames.module.css";
@@ -104,15 +105,16 @@ export default function NumberMemory() {
   }
 
   const startButton = (label: string, nextLevel: number) => (
-    <button className={stage.primary} type="button" onClick={() => showNumber(nextLevel)}>
+    <GameAction onClick={() => showNumber(nextLevel)}>
       {label}
-    </button>
+    </GameAction>
   );
 
   return (
     <GameShell
       game="number-memory"
       revision={revision}
+      progress={{ label: `Level ${level}` }}
       active={phase === "show" || phase === "answer"}
       practice={<PracticePanel enabled={adaptive} onChange={resetSetting}
         label="Adaptive practice"
@@ -152,7 +154,7 @@ export default function NumberMemory() {
                 maxLength={digits.length}
                 onChange={(event) => setAnswer(event.target.value.replace(/\D/g, ""))}
               />
-              <button className={stage.primary} disabled={!answer} type="submit">Submit</button>
+              <GameAction type="submit" disabled={!answer}>Submit</GameAction>
             </form>
           )}
           {(phase === "correct" || phase === "failed" || phase === "finished") && (

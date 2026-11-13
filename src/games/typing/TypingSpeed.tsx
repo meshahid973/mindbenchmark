@@ -1,5 +1,6 @@
 import { Keyboard } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { GameAction } from "../components/GameAction";
 import { GameShell } from "../components/GameShell";
 import stage from "../components/Stage.module.css";
 import styles from "../components/ExtraGames.module.css";
@@ -141,6 +142,7 @@ export default function TypingSpeed() {
     <GameShell
       game="typing-speed"
       revision={revision}
+      progress={{ label: `${seconds}s remaining` }}
       howTo="Type the displayed words for 30 seconds. WPM counts correctly typed characters divided by five, per minute. Paste is disabled."
       stage={
         <div className={stage.panel}>
@@ -180,9 +182,9 @@ export default function TypingSpeed() {
               {phase === "finished" && (
                 <p className={stage.message}>{result.accuracy}% accuracy{drilling ? " · unscored" : ""}</p>
               )}
-              <button className={stage.primary} type="button" onClick={() => start("benchmark")}>
+              <GameAction onClick={() => start("benchmark")}>
                 {phase === "finished" ? "Try again" : "Start"}
-              </button>
+              </GameAction>
               {phase === "finished" && weakPairs.length > 0 && !drilling && (
                 <button type="button" className={styles.choice} onClick={() => start("drill")}>
                   Practice weak pairs · {weakPairs.join(", ")}

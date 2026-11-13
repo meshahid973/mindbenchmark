@@ -1,5 +1,6 @@
 import { Grid2X2, RotateCcw } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { GameAction } from "../components/GameAction";
 import { GameShell } from "../components/GameShell";
 import { PracticePanel } from "../components/PracticePanel";
 import { advanceAdaptive, adaptiveSummary, initialAdaptive } from "../core/adaptive";
@@ -178,6 +179,7 @@ export default function SequenceMemory() {
     <GameShell
       game="sequence-memory"
       revision={revision}
+      progress={{ label: `Level ${level}` }}
       active={mode === "showing" || mode === "input" || mode === "levelup"}
       practice={<PracticePanel enabled={adaptive} onChange={changePractice}
         label="Adaptive practice"
@@ -194,10 +196,10 @@ export default function SequenceMemory() {
             <span className={styles.rounds}>Level {level}</span>
           )}
           {mode === "ready" || mode === "failed" || mode === "review" ? (
-            <button type="button" className={styles.primary} onClick={start}>
+            <GameAction onClick={start}>
               {mode === "failed" && <RotateCcw size={17} aria-hidden="true" />}
               {adaptive && mode !== "ready" ? "Continue practice" : mode === "failed" ? "Try again" : adaptive ? "Start practice" : "Start"}
-            </button>
+            </GameAction>
           ) : (
             <fieldset className={styles.board} aria-label="Memory tiles">
               {tiles.map((tile) => (

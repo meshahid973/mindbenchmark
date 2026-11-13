@@ -1,5 +1,6 @@
 import { Puzzle } from "lucide-react";
 import { useRef, useState } from "react";
+import { GameAction } from "../components/GameAction";
 import { GameShell } from "../components/GameShell";
 import stage from "../components/Stage.module.css";
 import styles from "../components/ExtraGames.module.css";
@@ -88,6 +89,7 @@ export default function ChimpTest() {
     <GameShell
       game="chimp-test"
       revision={revision}
+      progress={{ label: `${level} numbers` }}
       active={phase === "playing"}
       howTo="Click the numbers in order. They disappear after your first click. Three mistakes end the run."
       stage={
@@ -120,12 +122,12 @@ export default function ChimpTest() {
               <h1 className={stage.title}>
                 {phase === "finished" ? `${bestRun} numbers` : "Chimp Test"}
               </h1>
-              <button className={stage.primary} type="button" onClick={() => {
+              <GameAction onClick={() => {
                 completed.current = 0;
                 begin();
               }}>
                 {phase === "finished" ? "Try again" : "Start"}
-              </button>
+              </GameAction>
             </>
           )}
         </div>

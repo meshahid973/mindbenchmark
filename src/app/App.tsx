@@ -12,9 +12,11 @@ import {
   loadVerbal,
   loadVisual,
 } from "../games/loaders";
-import { Games } from "../pages/Games";
+
 import { Home } from "../pages/Home";
 import { getGame, type Game } from "./games";
+
+const Games = lazy(async () => ({ default: (await import("../pages/Games")).Games }));
 
 const components = {
   "reaction-time": lazy(loadReaction),
@@ -48,7 +50,7 @@ export function App() {
       <main id="content" tabIndex={-1}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/games" element={<Games />} />
+          <Route path="/games" element={<Suspense fallback={<p className="game-loading" role="status">Loading games…</p>}><Games /></Suspense>} />
           <Route path="/games/:slug" element={<GamePage />} />
           <Route path="/multiplayer" element={<PlaceholderPage title="Multiplayer" />} />
           <Route path="/leaderboards" element={<PlaceholderPage title="Leaderboards" />} />

@@ -1,13 +1,5 @@
 import {
-  ArrowUpRight,
-  BookOpen,
-  Crosshair,
-  Eye,
-  Grid2X2,
-  Hash,
-  Keyboard,
-  Puzzle,
-  Zap,
+  ArrowRight, BookOpen, Crosshair, Eye, Grid2X2, Hash, Keyboard, Puzzle, Zap,
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "react-router";
@@ -37,11 +29,11 @@ export function GameCard({ game, detailed = false }: { game: Game; detailed?: bo
       onFocus={() => prefetchGame(game.slug)}
     >
       <span className={styles.icon} aria-hidden="true">
-        <Icon size={32} strokeWidth={1.65} />
+        <Icon size={25} strokeWidth={1.75} />
       </span>
       <span className={styles.name}>{game.name}</span>
       {detailed && <span className={styles.hint}>{game.hint}</span>}
-      <ArrowUpRight className={styles.arrow} size={17} aria-hidden="true" />
+      <span className={styles.play}>Play <ArrowRight size={14} aria-hidden="true" /></span>
     </Link>
   );
 }
