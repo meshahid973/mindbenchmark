@@ -1,11 +1,14 @@
 import { Eye } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GameShell } from "../components/GameShell";
+import { PracticePanel } from "../components/PracticePanel";
+import { advanceAdaptive, adaptiveSummary, initialAdaptive } from "../core/adaptive";
 import stage from "../components/Stage.module.css";
 import styles from "../components/ExtraGames.module.css";
 import { visualPattern } from "../core/challenges";
 import { saveScore } from "../core/scores";
 import { useGameInterruption } from "../core/useGameInterruption";
+import { useTrainingSetting } from "../core/useTrainingSetting";
 
 type Phase = "ready" | "showing" | "input" | "passed" | "finished";
 const maximumLevel = 15;
@@ -21,6 +24,9 @@ export default function VisualMemory() {
   const [missed, setMissed] = useState<number[]>([]);
   const [completed, setCompleted] = useState(0);
   const [revision, setRevision] = useState(0);
+  const [adaptive, setAdaptive] = useTrainingSetting("adaptive-memory");
+  const training = useRef(initialAdaptive(2));
+  const [progress, setProgress] = useState(training.current);
 
   const timer = useRef<number | null>(null);
   const phaseRef = useRef<Phase>("ready");
@@ -44,6 +50,8 @@ export default function VisualMemory() {
     setLives(3);
     setSelected([]);
     setCompleted(0);
+    training.current = initialAdaptive(2);
+    setProgress(training.current);
   });
 
   useEffect(() => () => clearTimer(), [clearTimer]);
@@ -69,9 +77,33 @@ export default function VisualMemory() {
     }, 1700);
   }
 
+  function changePractice(enabled: boolean) {
+    clearTimer();
+    setAdaptive(enabled);
+    training.current = initialAdaptive(2);
+    setProgress(training.current);
+    phaseRef.current = "ready";
+    setPhase("ready");
+    setLevel(1);
+    setLives(3);
+    setCompleted(0);
+    chosen.current.clear();
+    missedRef.current.clear();
+    setSelected([]);
+    setMissed([]);
+  }
+
   function press(index: number) {
     if (phaseRef.current !== "input" || chosen.current.has(index) || missedRef.current.has(index)) return;
     if (!highlights.includes(index)) {
+      if (adaptive) {
+        const updated = advanceAdaptive(training.current, false, 1, 15);
+        training.current = updated;
+        setProgress(updated);
+        phaseRef.current = "finished";
+        setPhase("finished");
+        return;
+      }
       missedRef.current.add(index);
       setMissed([...missedRef.current]);
       const remaining = lives - 1;
@@ -88,6 +120,14 @@ export default function VisualMemory() {
     chosen.current.add(index);
     setSelected([...chosen.current]);
     if (chosen.current.size === highlights.length) {
+      if (adaptive) {
+        const updated = advanceAdaptive(training.current, true, 1, 15);
+        training.current = updated;
+        setProgress(updated);
+        phaseRef.current = "passed";
+        setPhase("passed");
+        return;
+      }
       const result = Math.max(completed, level);
       setCompleted(result);
       if (level === maximumLevel) {
@@ -107,6 +147,11 @@ export default function VisualMemory() {
       game="visual-memory"
       revision={revision}
       active={phase === "showing" || phase === "input"}
+      practice={<PracticePanel enabled={adaptive} onChange={changePractice}
+        label="Adaptive practice"
+        description={adaptive ? "Unscored · match a pattern, then adjust difficulty." : "Off by default · standard scores stay separate."}
+        lesson={{ title: "Learn visual chunking", body: <>Look for small <strong>lines, corners and L-shapes</strong>, rather than memorizing every square separately.</> }}
+        feedback={adaptiveSummary(progress)} />
       howTo="Remember the highlighted squares and select them after they disappear. You have three lives."
       stage={
         <div className={stage.panel}>
@@ -114,23 +159,23 @@ export default function VisualMemory() {
           {(phase === "ready" || phase === "finished" || phase === "passed") ? (
             <>
               <h1 className={stage.title}>
-                {phase === "finished" ? `Level ${completed}` :
+                {phase === "finished" ? adaptive ? "Try another pattern" : `Level ${completed}` :
                   phase === "passed" ? "Correct" : "Visual Memory"}
               </h1>
               <button className={stage.primary} type="button" onClick={() => {
-                if (phase !== "passed") {
+                if (!adaptive && phase !== "passed") {
                   setLives(3);
                   setCompleted(0);
                 }
-                startLevel(phase === "passed" ? level + 1 : 1);
+                startLevel(adaptive ? progress.level : phase === "passed" ? level + 1 : 1);
               }}>
-                {phase === "passed" ? "Next" : phase === "finished" ? "Try again" : "Start"}
+                {adaptive ? phase === "ready" ? "Start practice" : "Next practice" : phase === "passed" ? "Next" : phase === "finished" ? "Try again" : "Start"}
               </button>
             </>
           ) : (
             <>
               <div className={styles.stats}>
-                <span>Level {level}</span><span>Lives {lives}</span>
+                <span>Level {level}</span><span>{adaptive ? "Practice" : `Lives ${lives}`}</span>
               </div>
               <h1 className={styles.shortTitle}>
                 {phase === "showing" ? "Remember" : "Select the squares"}
