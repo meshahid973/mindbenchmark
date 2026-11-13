@@ -1,17 +1,6 @@
-import { Moon, Sun, Zap } from "lucide-react";
-import { useLayoutEffect, useState } from "react";
+import { Zap } from "lucide-react";
 import { Link, NavLink } from "react-router";
-
-type Theme = "dark" | "light";
-const themeKey = "mindbenchmark-theme";
-
-function initialTheme(): Theme {
-  try {
-    return window.localStorage.getItem(themeKey) === "light" ? "light" : "dark";
-  } catch {
-    return "dark";
-  }
-}
+import { ThemeToggle } from "./ThemeToggle";
 
 const navigation = [
   { to: "/games", label: "Games" },
@@ -20,17 +9,6 @@ const navigation = [
 ] as const;
 
 export function SiteHeader() {
-  const [theme, setTheme] = useState<Theme>(initialTheme);
-
-  useLayoutEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    try {
-      window.localStorage.setItem(themeKey, theme);
-    } catch {
-      // Keep the theme working when storage is disabled.
-    }
-  }, [theme]);
-
   return (
     <header className="site-header">
       <div className="header-inner">
@@ -49,15 +27,7 @@ export function SiteHeader() {
             </NavLink>
           ))}
         </nav>
-        <button
-          type="button"
-          className="theme-toggle"
-          aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-          title={theme === "dark" ? "Light theme" : "Dark theme"}
-          onClick={() => setTheme((current) => current === "dark" ? "light" : "dark")}
-        >
-          {theme === "dark" ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
-        </button>
+        <ThemeToggle />
       </div>
     </header>
   );

@@ -114,11 +114,6 @@ main {
   color: var(--text);
 }
 
-.route-loading {
-  padding-block: 55px;
-  color: var(--muted);
-}
-
 .site-footer {
   display: flex;
   width: min(calc(100% - 40px), var(--content-width));

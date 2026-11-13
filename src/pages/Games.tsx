@@ -5,7 +5,7 @@ import { SegmentedControl } from "../components/arc/SegmentedControl";
 
 const options = gameFilters.map((value) => ({ value, label: value }));
 
-export default function Games() {
+export function Games() {
   const [filter, setFilter] = useState<GameFilter>("All");
 
   return (

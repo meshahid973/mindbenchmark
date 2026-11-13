@@ -48,6 +48,22 @@ p {
   margin: 0;
 }
 
+.skip-link {
+  position: fixed;
+  z-index: 10;
+  top: 8px;
+  left: 8px;
+  padding: 9px 14px;
+  border-radius: 8px;
+  background: var(--button);
+  color: var(--button-text);
+  transform: translateY(-150%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
