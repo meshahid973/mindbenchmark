@@ -1,5 +1,7 @@
 .root {
   display: inline-flex;
+  margin: 0;
+  padding: 0;
   min-width: 0;
   max-width: 100%;
   border: 1px solid var(--color-border);

@@ -235,5 +235,5 @@ main { flex: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  .nav-link, .theme-toggle, .hero-button, .game-card, .game-card::before { transition: none; }
 }

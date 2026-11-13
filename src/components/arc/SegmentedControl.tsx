@@ -45,11 +45,11 @@ export function SegmentedControl({ options, value, onValueChange, label }: Segme
       node.removeEventListener("scroll", updateEdges);
       observer?.disconnect();
     };
-  }, [options.length]);
+  }, []);
 
   useEffect(() => {
     const node = track.current;
-    const button = node?.querySelector<HTMLElement>('[aria-pressed="true"]');
+    const button = node?.querySelector<HTMLElement>(`[data-value="${CSS.escape(value)}"]`);
     if (!node || !button || node.scrollWidth <= node.clientWidth) {
       first.current = false;
       return;
@@ -57,9 +57,9 @@ export function SegmentedControl({ options, value, onValueChange, label }: Segme
     const room = 20;
     const start = button.offsetLeft - room;
     const end = button.offsetLeft + button.offsetWidth + room - node.clientWidth;
-    const left = node.scrollLeft > start ? start : node.scrollLeft < end ? end : node.scrollLeft;
+    const left = Math.max(end, Math.min(start, node.scrollLeft));
     if (left !== node.scrollLeft) {
-      node.scrollTo({ left: Math.max(0, left), behavior: first.current || reduced ? "instant" : "smooth" });
+      node.scrollTo({ left: Math.max(0, left), behavior: first.current || reduced ? "auto" : "smooth" });
     }
     first.current = false;
   }, [value, reduced]);
@@ -78,7 +78,7 @@ export function SegmentedControl({ options, value, onValueChange, label }: Segme
   };
 
   return (
-    <div className={styles.root} role="group" aria-label={label}>
+    <fieldset className={styles.root} aria-label={label}>
       <LayoutGroup id={id}>
         <motion.div ref={track} layoutScroll className={styles.track}>
           {options.map((option, index) => (
@@ -106,6 +106,6 @@ export function SegmentedControl({ options, value, onValueChange, label }: Segme
           ))}
         </motion.div>
       </LayoutGroup>
-    </div>
+    </fieldset>
   );
 }
