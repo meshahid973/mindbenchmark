@@ -2,30 +2,40 @@ import { lazy, Suspense } from "react";
 import { Route, Routes, useParams } from "react-router";
 import { PlaceholderPage } from "../components/PlaceholderPage";
 import { SiteHeader } from "../components/SiteHeader";
-import { loadAim, loadReaction, loadSequence } from "../games/loaders";
+import {
+  loadAim,
+  loadChimp,
+  loadNumber,
+  loadReaction,
+  loadSequence,
+  loadTyping,
+  loadVerbal,
+  loadVisual,
+} from "../games/loaders";
 import { Games } from "../pages/Games";
 import { Home } from "../pages/Home";
-import { getGame } from "./games";
+import { getGame, type Game } from "./games";
 
-const ReactionTime = lazy(loadReaction);
-const SequenceMemory = lazy(loadSequence);
-const AimTrainer = lazy(loadAim);
+const components = {
+  "reaction-time": lazy(loadReaction),
+  "sequence-memory": lazy(loadSequence),
+  "aim-trainer": lazy(loadAim),
+  "number-memory": lazy(loadNumber),
+  "verbal-memory": lazy(loadVerbal),
+  "chimp-test": lazy(loadChimp),
+  "visual-memory": lazy(loadVisual),
+  "typing-speed": lazy(loadTyping),
+} satisfies Record<Game["slug"], ReturnType<typeof lazy>>;
 
 function GamePage() {
   const { slug } = useParams();
   const game = getGame(slug);
   if (!game) return <PlaceholderPage title="Page not found" label="404" />;
 
-  let content = null;
-  if (slug === "reaction-time") content = <ReactionTime />;
-  if (slug === "sequence-memory") content = <SequenceMemory />;
-  if (slug === "aim-trainer") content = <AimTrainer />;
-
-  if (!content) return <PlaceholderPage title={game.name} label="Coming soon" />;
-
+  const Component = components[game.slug];
   return (
     <Suspense fallback={<p className="game-loading" role="status">Loading game…</p>}>
-      {content}
+      <Component />
     </Suspense>
   );
 }

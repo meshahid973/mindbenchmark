@@ -79,7 +79,7 @@ export default function AimTrainer() {
       frame.current = null;
       paintFrame.current = window.requestAnimationFrame((frameTime) => {
         paintFrame.current = null;
-        if (active.current) {
+        if (active.current && hitsRef.current === 0) {
           startAt.current = presentedAt(startAt.current, frameTime);
         }
       });

@@ -4,7 +4,7 @@ import { flushSync } from "react-dom";
 import { GameShell } from "../components/GameShell";
 import styles from "../components/Stage.module.css";
 import { reactionDelay } from "../core/random";
-import { median, saveScore } from "../core/scores";
+import { mean, median, saveScore } from "../core/scores";
 import {
   elapsedMilliseconds,
   inputTimestamp,
@@ -155,18 +155,19 @@ export default function ReactionTime() {
   const signal = phase === "waiting" || phase === "go" ? reactionSignal(phase) : undefined;
   const lastTime = times.at(-1);
   const bestRun = times.length === roundsRequired ? Math.round(median(times)) : null;
+  const average = times.length ? Math.round(mean(times)) : null;
 
   const heading = phase === "ready" ? "Reaction Time"
     : phase === "waiting" ? "Wait for green"
     : phase === "go" ? "Click!"
     : phase === "early" ? "Too soon!"
-    : phase === "finished" ? `${bestRun} ms`
+    : phase === "finished" ? `${average} ms`
     : `${lastTime} ms`;
 
   const message = phase === "ready" ? "Click to start"
     : phase === "early" ? "Click to retry"
-    : phase === "finished" ? "Click to restart"
-    : phase === "between" ? "Click to continue"
+    : phase === "finished" ? "Average reaction time"
+    : phase === "between" ? `Average ${average} ms · Click to continue`
     : null;
 
   return (
@@ -197,6 +198,9 @@ export default function ReactionTime() {
           {message && <p className={styles.message}>{message}</p>}
           {phase === "between" && (
             <span className={styles.rounds}>{times.length} / {roundsRequired}</span>
+          )}
+          {phase === "finished" && (
+            <span className={styles.rounds}>Median {bestRun} ms · Click to restart</span>
           )}
         </div>
       }

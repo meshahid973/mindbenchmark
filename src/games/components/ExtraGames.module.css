@@ -1,0 +1,191 @@
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.digits {
+  max-width: 740px;
+  margin-top: 22px;
+  color: var(--text);
+  font-size: clamp(1.65rem, 5vw, 3.6rem);
+  font-weight: 650;
+  letter-spacing: 0.07em;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.answerForm {
+  display: flex;
+  width: min(440px, calc(100% - 18px));
+  flex-direction: column;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.input,
+.typingInput {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.03rem;
+  text-align: center;
+  outline-offset: 3px;
+}
+
+.input {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.choice {
+  min-width: 125px;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.choice:hover,
+.choice:focus-visible {
+  background: var(--surface-hover);
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 12px 0 22px;
+  color: var(--muted);
+  font-size: 0.83rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.shortTitle {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 650;
+  letter-spacing: -0.04em;
+}
+
+.chimpGrid,
+.visualGrid {
+  display: grid;
+  width: min(435px, calc(100vw - 38px));
+  gap: clamp(5px, 1.2vw, 8px);
+  margin: 24px auto 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.chimpGrid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.chimpTile,
+.visualTile {
+  display: grid;
+  min-width: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 670;
+  font-size: clamp(0.83rem, 1.8vw, 1.3rem);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.chimpTile[data-visible="true"],
+.visualTile[data-lit="true"] {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--page);
+}
+
+.chimpTile[data-cleared="true"] {
+  opacity: 0.2;
+  cursor: default;
+}
+
+.visualGrid {
+  width: min(365px, calc(100vw - 38px));
+}
+
+.visualTile:disabled {
+  cursor: default;
+}
+
+.typingPassage {
+  width: min(730px, calc(100% - 12px));
+  max-height: 115px;
+  overflow: auto;
+  margin: 8px 0 18px;
+  padding: 4px;
+  color: var(--muted);
+  font-size: clamp(0.98rem, 2vw, 1.17rem);
+  line-height: 1.7;
+  text-align: left;
+  overflow-wrap: break-word;
+}
+
+.typedCorrect {
+  color: var(--text);
+}
+
+.cursorText {
+  color: var(--text);
+  background: var(--border-strong);
+}
+
+.typingInput {
+  width: min(730px, calc(100% - 12px));
+  min-height: 78px;
+  resize: vertical;
+  text-align: left;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 550px) {
+  .chimpGrid {
+    width: min(330px, calc(100vw - 36px));
+    gap: 5px;
+  }
+
+  .chimpTile {
+    border-radius: 6px;
+  }
+
+  .typingPassage {
+    max-height: 125px;
+  }
+}

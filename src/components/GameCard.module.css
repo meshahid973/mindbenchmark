@@ -82,15 +82,6 @@
   line-height: 1.45;
 }
 
-.soon {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  color: var(--muted);
-  font-size: 0.68rem;
-  font-weight: 550;
-}
-
 .arrow {
   position: absolute;
   top: 14px;
