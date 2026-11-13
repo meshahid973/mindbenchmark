@@ -72,7 +72,7 @@ export default function VisualMemory() {
 
   function press(index: number) {
     if (phaseRef.current !== "input" || chosen.current.has(index)) return;
-    if (!highlights.includes(cell)) {
+    if (!highlights.includes(index)) {
       const remaining = lives - 1;
       setLives(remaining);
       if (remaining === 0) {
@@ -143,9 +143,9 @@ export default function VisualMemory() {
                     key={cell}
                     type="button"
                     className={styles.visualTile}
-                    data-lit={phase === "showing" ? highlights.includes(index) : selected.includes(cell)}
+                    data-lit={phase === "showing" ? highlights.includes(cell) : selected.includes(cell)}
                     aria-label={`Square ${cell + 1}`}
-                    disabled={phase === "showing" || selected.includes(index)}
+                    disabled={phase === "showing" || selected.includes(cell)}
                     onClick={() => press(cell)}
                   />
                 ))}
