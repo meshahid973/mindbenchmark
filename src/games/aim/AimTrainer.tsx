@@ -156,12 +156,12 @@ export default function AimTrainer() {
                 </span>
               )}
               {mode === "ready" && (
-                <div className={styles.modeChoice} role="group" aria-label="Aim Trainer length">
+                <fieldset className={styles.modeChoice} aria-label="Aim Trainer length">
                   <button type="button" aria-pressed={targetCount === 30}
                     onClick={() => setTargetCount(30)}>Standard · 30</button>
                   <button type="button" aria-pressed={targetCount === 20}
                     onClick={() => setTargetCount(20)}>Quick · 20</button>
-                </div>
+                </fieldset>
               )}
               <button className={styles.primary} type="button" onClick={start}>
                 {mode === "finished" && <RotateCcw size={17} aria-hidden="true" />}
