@@ -11,15 +11,13 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '22.23.0'
+          cache: npm
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
-      - name: Export dependency snapshot
-        run: |
-          node -e 'const fs = require("node:fs"); const b64 = fs.readFileSync("package-lock.json").toString("base64"); console.log("MBLOCK_BEGIN"); for (let i = 0; i < b64.length; i += 3000) console.log(b64.slice(i, i + 3000)); console.log("MBLOCK_END")'
+        run: npm ci --no-audit --no-fund
       - name: Lint
         run: npm run lint
       - name: Typecheck
