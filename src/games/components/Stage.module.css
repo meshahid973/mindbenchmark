@@ -13,16 +13,18 @@
   -webkit-user-select: none;
 }
 
-.action {
+.fillAction {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
   border: 0;
-  border-radius: 0;
   background: transparent;
-  font: inherit;
+  color: inherit;
   cursor: pointer;
   touch-action: manipulation;
 }
 
-.action:focus-visible {
+.fillAction:focus-visible {
   outline: 3px solid currentColor;
   outline-offset: -6px;
 }

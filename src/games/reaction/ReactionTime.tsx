@@ -146,22 +146,26 @@ export default function ReactionTime() {
       revision={revision}
       howTo="Wait until the screen changes color, then react as quickly as you can. The wait is different every round, and either color can be the signal. Five valid rounds make one score."
       stage={
-        <button
-          type="button"
-          className={`${styles.panel} ${styles.action}`}
+        <div
+          className={styles.panel}
           data-signal={signal}
-          onPointerDown={(event) => {
-            if (event.pointerType === "mouse" && event.button !== 0) return;
-            respond(performance.now());
-          }}
-          onKeyDown={(event) => {
-            if (event.repeat || (event.key !== " " && event.key !== "Enter")) return;
-            event.preventDefault();
-            respond(performance.now());
-          }}
         >
+          <button
+            type="button"
+            className={styles.fillAction}
+            aria-label={`${heading}. ${message}`}
+            onPointerDown={(event) => {
+              if (event.pointerType === "mouse" && event.button !== 0) return;
+              respond(performance.now());
+            }}
+            onKeyDown={(event) => {
+              if (event.repeat || (event.key !== " " && event.key !== "Enter")) return;
+              event.preventDefault();
+              respond(performance.now());
+            }}
+          />
           <Icon className={styles.symbol} size={55} strokeWidth={1.8} aria-hidden="true" />
-          <span className={styles.title} role="heading" aria-level={1}>{heading}</span>
+          <h1 className={styles.title}>{heading}</h1>
           <span className={styles.message} aria-live="polite">{message}</span>
           {phase === "waiting" && <span className={styles.secondary}>Early clicks don't count.</span>}
           {phase === "early" && <span className={styles.secondary}>Tap to retry.</span>}
@@ -170,7 +174,7 @@ export default function ReactionTime() {
             <span className={styles.rounds}>Round {times.length + 1} / {roundsRequired}</span>
           )}
           {phase === "finished" && <span className={styles.rounds}>{times.join(" · ")} ms</span>}
-        </button>
+        </div>
       }
     />
   );

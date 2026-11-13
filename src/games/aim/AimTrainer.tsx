@@ -15,6 +15,7 @@ export default function AimTrainer() {
   const hitsRef = useRef(0);
   const missesRef = useRef(0);
   const targetRef = useRef<Position>({ x: 50, y: 50 });
+  const lastPointerAt = useRef(-Infinity);
 
   const [mode, setMode] = useState<Mode>("ready");
   const [hits, setHits] = useState(0);
@@ -108,11 +109,14 @@ export default function AimTrainer() {
                 onPointerDown={(event) => {
                   if (event.pointerType === "mouse" && event.button !== 0) return;
                   event.stopPropagation();
-                  hit(performance.now());
+                  lastPointerAt.current = performance.now();
+                  hit(lastPointerAt.current);
                 }}
                 onClick={(event) => {
                   // Keyboard-generated clicks have detail 0. Pointer clicks were handled above.
-                  if (event.detail === 0) hit(performance.now());
+                  if (event.detail === 0 && performance.now() - lastPointerAt.current > 350) {
+                    hit(performance.now());
+                  }
                 }}
                 onKeyDown={(event) => {
                   if (event.repeat) event.preventDefault();
