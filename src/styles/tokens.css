@@ -1,0 +1,38 @@
+:root {
+  color-scheme: dark;
+  --page: #090909;
+  --header: #0b0b0b;
+  --surface: #131313;
+  --surface-hover: #1b1b1b;
+  --icon-surface: #1d1d1d;
+  --hero: #0d0d0d;
+  --hero-highlight: #242424;
+  --text: #f7f7f7;
+  --muted: #989898;
+  --border: #292929;
+  --border-strong: #646464;
+  --spotlight: rgb(255 255 255 / 6%);
+  --shadow: rgb(0 0 0 / 18%);
+  --button: #fff;
+  --button-text: #101010;
+  --content-width: 1060px;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page: #f7f7f7;
+  --header: #fff;
+  --surface: #fff;
+  --surface-hover: #f0f0f0;
+  --icon-surface: #f4f4f4;
+  --hero: #f0f0f0;
+  --hero-highlight: #fff;
+  --text: #111;
+  --muted: #606060;
+  --border: #dedede;
+  --border-strong: #999;
+  --spotlight: rgb(0 0 0 / 4%);
+  --shadow: rgb(0 0 0 / 4%);
+  --button: #111;
+  --button-text: #fff;
+}

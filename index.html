@@ -1,11 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a0b0f" />
-    <meta name="description" content="MindBenchmark — play, improve, compete." />
-    <title>MindBenchmark — Test your limits</title>
+    <meta name="theme-color" content="#090909" />
+    <meta name="description" content="MindBenchmark. Test your reflexes and memory." />
+    <title>MindBenchmark | Test your mind</title>
+    <script>
+      try {
+        if (localStorage.getItem("mindbenchmark-theme") === "light") {
+          document.documentElement.dataset.theme = "light";
+        }
+      } catch {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

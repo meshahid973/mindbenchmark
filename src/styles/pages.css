@@ -1,0 +1,144 @@
+.hero {
+  display: grid;
+  min-height: clamp(304px, 32vw, 375px);
+  place-items: center;
+  border-bottom: 1px solid var(--border);
+  background: radial-gradient(ellipse 66% 65% at 50% -14%, var(--hero-highlight), transparent 100%), var(--hero);
+  text-align: center;
+}
+
+.hero-inner {
+  width: min(calc(100% - 32px), 760px);
+  padding-block: 48px 54px;
+}
+
+.hero-inner > svg {
+  display: block;
+  margin: 0 auto 20px;
+  color: var(--text);
+}
+
+.hero h1 {
+  font-size: clamp(2.15rem, 6.6vw, 4.8rem);
+  font-weight: 750;
+  letter-spacing: -0.065em;
+  line-height: 1.08;
+}
+
+.hero p {
+  margin-top: 11px;
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+
+.primary-button {
+  display: inline-flex;
+  min-height: 45px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 27px;
+  padding-inline: 19px;
+  border: 1px solid var(--button);
+  border-radius: 9px;
+  background: var(--button);
+  color: var(--button-text);
+  font-size: 0.88rem;
+  font-weight: 650;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.primary-button:hover {
+  opacity: 0.87;
+  transform: translateY(-2px);
+}
+
+.primary-button:focus-visible {
+  outline-color: var(--text);
+  outline-offset: 4px;
+}
+
+.games-section {
+  padding-block: 37px 86px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 19px;
+}
+
+.section-heading h2 {
+  font-size: 1.18rem;
+  font-weight: 690;
+  letter-spacing: -0.035em;
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.text-link:hover {
+  color: var(--text);
+}
+
+.games-page {
+  padding-block: 57px 86px;
+}
+
+.page-heading h1 {
+  font-size: clamp(2.1rem, 5vw, 3.3rem);
+  font-weight: 730;
+  letter-spacing: -0.055em;
+}
+
+.page-heading p {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.filter-row {
+  display: flex;
+  margin-block: 29px 22px;
+}
+
+@media (max-width: 640px) {
+  .hero {
+    min-height: 296px;
+  }
+
+  .hero-inner {
+    padding-block: 43px;
+  }
+
+  .hero-inner > svg {
+    width: 45px;
+    height: 45px;
+    margin-bottom: 17px;
+  }
+
+  .hero p {
+    font-size: 0.91rem;
+  }
+
+  .games-section {
+    padding-block: 29px 65px;
+  }
+
+  .games-page {
+    padding-block: 40px 65px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary-button {
+    transition: none;
+  }
+}

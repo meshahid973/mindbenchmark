@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { games, getGame } from "./games";
+import { filterGames, gameFilters, games, getGame } from "./games";
 
 describe("game registry", () => {
   it("uses unique, URL-safe slugs", () => {
@@ -12,5 +12,13 @@ describe("game registry", () => {
   it("resolves known games and ignores unknown ones", () => {
     expect(getGame("reaction-time")?.name).toBe("Reaction Time");
     expect(getGame("not-a-game")).toBeUndefined();
+  });
+
+  it("filters games by supported categories", () => {
+    expect(filterGames("All")).toHaveLength(games.length);
+    expect(filterGames("Memory")).toHaveLength(5);
+    expect(filterGames("Speed")).toHaveLength(2);
+    expect(filterGames("Precision")).toHaveLength(1);
+    expect(gameFilters).toEqual(["All", "Speed", "Memory", "Precision"]);
   });
 });
