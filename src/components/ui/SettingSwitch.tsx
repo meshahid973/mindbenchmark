@@ -1,4 +1,5 @@
 import { Switch } from "@base-ui/react/switch";
+import { useId } from "react";
 import styles from "./SettingSwitch.module.css";
 
 export function SettingSwitch({
@@ -8,12 +9,14 @@ export function SettingSwitch({
   onCheckedChange: (checked: boolean) => void;
   label: string;
 }) {
+  const id = useId();
   return (
-    <label className={styles.label}>
-      <Switch.Root className={styles.track} checked={checked} onCheckedChange={onCheckedChange}>
+    <div className={styles.label}>
+      <Switch.Root id={id} nativeButton render={<button type="button" />}
+        className={styles.track} checked={checked} onCheckedChange={onCheckedChange}>
         <Switch.Thumb className={styles.thumb} />
       </Switch.Root>
-      <span>{label}</span>
-    </label>
+      <label htmlFor={id}>{label}</label>
+    </div>
   );
 }

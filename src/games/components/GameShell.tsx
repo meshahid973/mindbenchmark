@@ -23,8 +23,9 @@ export function GameShell({
   progress?: GameProgress;
 }) {
   const title = getGame(game)?.name ?? "Game";
-  const percent = progress && progress.total && progress.total > 0
-    ? Math.max(0, Math.min(100, ((progress.current ?? 0) / progress.total) * 100))
+  const total = progress?.total;
+  const percent = total && total > 0
+    ? Math.max(0, Math.min(100, ((progress?.current ?? 0) / total) * 100))
     : null;
 
   return (
