@@ -13,7 +13,7 @@ export function ScoreTrend({ values, unit }: { values: readonly number[]; unit: 
     const bounds = event.currentTarget.getBoundingClientRect();
     if (!bounds.width) return;
     const fraction = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width));
-    setSelected(Math.round(fraction * (values.length - 1)));
+    setSelected(Math.round(Math.max(0, Math.min(1, (fraction * 220 - 8) / 204)) * (values.length - 1)));
   }
 
   return (
