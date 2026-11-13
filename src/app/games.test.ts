@@ -16,7 +16,7 @@ describe("game registry", () => {
 
   it("filters games by supported categories", () => {
     expect(filterGames("All")).toHaveLength(games.length);
-    expect(filterGames("Memory")).toHaveLength(4);
+    expect(filterGames("Memory")).toHaveLength(5);
     expect(filterGames("Speed")).toHaveLength(2);
     expect(filterGames("Precision")).toHaveLength(1);
     expect(gameFilters).toEqual(["All", "Speed", "Memory", "Precision"]);

@@ -1,5 +1,5 @@
 import { Moon, Sun, Zap } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
 
 type Theme = "light" | "dark";
@@ -22,7 +22,7 @@ const navigation = [
 export function SiteHeader() {
   const [theme, setTheme] = useState<Theme>(initialTheme);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme;
     try {
       window.localStorage.setItem(themeKey, theme);

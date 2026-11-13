@@ -4,7 +4,7 @@ Fast, minimal brain games, built with React and Cloudflare.
 
 ## Development
 
-Use Node.js 22.18+.
+Use Node.js 22.23+.
 
 ```bash
 npm install
