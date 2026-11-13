@@ -2,14 +2,14 @@ import { Moon, Sun, Zap } from "lucide-react";
 import { useLayoutEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
 
-type Theme = "light" | "dark";
+type Theme = "dark" | "light";
 const themeKey = "mindbenchmark-theme";
 
 function initialTheme(): Theme {
   try {
-    return window.localStorage.getItem(themeKey) === "dark" ? "dark" : "light";
+    return window.localStorage.getItem(themeKey) === "light" ? "light" : "dark";
   } catch {
-    return "light";
+    return "dark";
   }
 }
 
@@ -27,7 +27,7 @@ export function SiteHeader() {
     try {
       window.localStorage.setItem(themeKey, theme);
     } catch {
-      // The theme still works when storage is unavailable.
+      // Keep the theme working when storage is disabled.
     }
   }, [theme]);
 
@@ -35,7 +35,7 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="header-inner">
         <Link className="brand" to="/" aria-label="MindBenchmark home">
-          <Zap size={20} fill="currentColor" strokeWidth={2.3} aria-hidden="true" />
+          <Zap size={19} fill="currentColor" strokeWidth={1.7} aria-hidden="true" />
           <span>MindBenchmark</span>
         </Link>
         <nav className="primary-nav" aria-label="Main navigation">
@@ -52,11 +52,11 @@ export function SiteHeader() {
         <button
           type="button"
           className="theme-toggle"
-          aria-label={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}
-          title={theme === "light" ? "Dark theme" : "Light theme"}
-          onClick={() => setTheme((current) => current === "light" ? "dark" : "light")}
+          aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+          title={theme === "dark" ? "Light theme" : "Dark theme"}
+          onClick={() => setTheme((current) => current === "dark" ? "light" : "dark")}
         >
-          {theme === "light" ? <Moon size={19} aria-hidden="true" /> : <Sun size={19} aria-hidden="true" />}
+          {theme === "dark" ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
         </button>
       </div>
     </header>

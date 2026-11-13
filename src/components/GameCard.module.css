@@ -1,0 +1,160 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 177px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 22px 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  text-align: center;
+  box-shadow: 0 2px 10px var(--shadow);
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+/* A lightweight version of the React Bits spotlight hover, with no pointer listeners. */
+.card::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse at 50% 0%, var(--spotlight), transparent 76%);
+  transition: opacity 180ms ease;
+}
+
+.card:hover,
+.card:focus-visible {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+
+.card:hover::before,
+.card:focus-visible::before {
+  opacity: 1;
+}
+
+.card:focus-visible {
+  outline-offset: 3px;
+}
+
+.icon,
+.name,
+.hint {
+  position: relative;
+  z-index: 1;
+}
+
+.icon {
+  display: grid;
+  width: 57px;
+  height: 57px;
+  place-items: center;
+  margin-bottom: 3px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  color: var(--text);
+  background: var(--icon-surface);
+}
+
+.name {
+  font-size: 0.94rem;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+
+.hint {
+  max-width: 190px;
+  color: var(--muted);
+  font-size: 0.77rem;
+  line-height: 1.45;
+}
+
+.arrow {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  color: var(--muted);
+  opacity: 0;
+  transform: translate(-3px, 3px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.card:hover .arrow,
+.card:focus-visible .arrow {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.empty {
+  padding-block: 40px;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .card {
+    min-height: 160px;
+    padding: 17px 9px;
+  }
+
+  .icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 13px;
+  }
+
+  .icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .name {
+    font-size: 0.85rem;
+  }
+
+  .arrow {
+    display: none;
+  }
+}
+
+@media (hover: none) {
+  .card:hover {
+    transform: none;
+  }
+
+  .card:hover::before {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card::before,
+  .arrow {
+    transition: none;
+  }
+}
