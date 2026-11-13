@@ -18,10 +18,20 @@ describe("app routes", () => {
     expect(html).toContain('href="#content"');
   });
 
-  it("renders game filters without an additional loading page", () => {
+  it("renders game filters", () => {
     const html = renderRoute("/games");
     expect(html).toContain("Filter games");
     expect(html).toContain("Precision");
+  });
+
+  it("prepares the playable game route without a placeholder", () => {
+    const html = renderRoute("/games/reaction-time");
+    expect(html).toContain("Loading game");
+    expect(html).not.toContain("In development");
+  });
+
+  it("keeps planned games clearly marked as coming soon", () => {
+    expect(renderRoute("/games/number-memory")).toContain("Coming soon");
   });
 
   it("renders a clear missing-page state", () => {

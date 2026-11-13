@@ -114,6 +114,14 @@ main {
   color: var(--text);
 }
 
+.game-loading {
+  display: grid;
+  min-height: 365px;
+  place-items: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 .site-footer {
   display: flex;
   width: min(calc(100% - 40px), var(--content-width));
