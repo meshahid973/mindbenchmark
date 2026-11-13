@@ -1,0 +1,27 @@
+.trigger {
+  display: inline-flex;
+  width: 25px;
+  height: 25px;
+  justify-content: center;
+  align-items: center;
+  margin-left: 3px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: help;
+  vertical-align: middle;
+}
+.trigger:hover, .trigger:focus-visible { color: var(--text); background: var(--surface-hover); }
+.popup {
+  z-index: 30;
+  max-width: 220px;
+  padding: 9px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 9px 28px var(--shadow);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}

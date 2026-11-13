@@ -1,4 +1,5 @@
 import { memo, useState } from "react";
+import { InfoTooltip } from "../../components/ui/InfoTooltip";
 import {
   bestScore,
   lowerIsBetter,
@@ -22,7 +23,10 @@ export const ScorePanel = memo(function ScorePanel({ game }: { game: ScoredGame 
 
   return (
     <article className={styles.card}>
-      <h2>Your results</h2>
+      <div className={styles.resultsHeading}>
+        <h2>Your results</h2>
+        <InfoTooltip label="Completed standard runs saved on this device. Practice sessions are excluded." />
+      </div>
       <div className={styles.metrics}>
         <div className={styles.metric}>
           <span className={styles.statLabel}>Best</span>

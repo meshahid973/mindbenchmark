@@ -1,79 +1,41 @@
 .panel {
   grid-column: 1 / -1;
-  padding: 18px 22px;
+  min-width: 0;
+  padding: 17px 22px;
   border: 1px solid var(--border);
   border-radius: 13px;
   background: var(--surface);
 }
-
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
 }
-
-.header h2 {
+.summary { min-width: 0; }
+.summary h2 {
   margin: 0 0 5px;
   color: var(--text);
-  font-size: 0.93rem;
+  font-size: 0.94rem;
+  font-weight: 660;
   letter-spacing: -0.02em;
 }
-
-.header p,
-.lesson,
-.feedback {
-  margin: 0;
+.summary p {
   color: var(--muted);
   font-size: 0.79rem;
   line-height: 1.5;
 }
-
-.toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  flex: 0 0 auto;
-  color: var(--text);
-  font-size: 0.81rem;
-  cursor: pointer;
-}
-
-.toggle input {
-  width: 17px;
-  height: 17px;
-  margin: 0;
-  accent-color: var(--text);
-}
-
-.lessonButton {
-  min-height: 38px;
-  margin-top: 7px;
-  padding: 6px 0;
-  border: 0;
-  background: transparent;
-  color: var(--text);
-  font-size: 0.8rem;
-  font-weight: 620;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  cursor: pointer;
-}
-
-.lesson {
-  margin-top: 6px;
-  padding: 12px;
+.feedback {
+  margin: 12px 0 0;
+  padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  font-variant-numeric: tabular-nums;
-}
-
-.feedback {
-  margin-top: 10px;
+  background: var(--surface-hover);
   color: var(--text);
+  font-size: 0.79rem;
+  line-height: 1.45;
 }
-
-@media (max-width: 450px) {
-  .panel { padding: 15px; }
-  .header { align-items: flex-start; flex-direction: column; gap: 12px; }
+@media (max-width: 540px) {
+  .panel { padding: 16px; }
+  .header { align-items: flex-start; flex-direction: column; gap: 6px; }
 }

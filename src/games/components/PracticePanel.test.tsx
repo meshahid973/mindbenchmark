@@ -10,8 +10,8 @@ describe("practice controls", () => {
         lesson={{ title: "Learn chunking", body: "572 · 814 · 639" }} />,
     );
     expect(html).toContain("Adaptive practice");
-    expect(html).toContain('type="checkbox"');
-    expect(html).not.toContain('checked=""');
+    expect(html).toContain('role="switch"');
+    expect(html).toContain('aria-checked="false"');
     expect(html).toContain("Learn chunking");
     expect(html).not.toContain("572 · 814 · 639");
   });

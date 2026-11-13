@@ -18,10 +18,9 @@ describe("app routes", () => {
     expect(html).toContain('href="#content"');
   });
 
-  it("renders game filters", () => {
+  it("loads the games directory separately from the homepage", () => {
     const html = renderRoute("/games");
-    expect(html).toContain("Filter games");
-    expect(html).toContain("Precision");
+    expect(html).toContain("Loading games");
   });
 
   it("prepares the playable game route without a placeholder", () => {

@@ -175,6 +175,7 @@ export default function ReactionTime() {
     <GameShell
       game="reaction-time"
       revision={revision}
+      progress={{ current: times.length, total: 5, label: phase === "finished" ? "Complete" : phase === "ready" ? "5 rounds" : `Round ${Math.min(times.length + 1, 5)} / 5` }}
       active={phase === "waiting" || phase === "go"}
       howTo="Click when red turns green. Five rounds."
       stage={

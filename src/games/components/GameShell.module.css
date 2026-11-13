@@ -1,5 +1,54 @@
 .page {
   width: 100%;
+  min-width: 0;
+}
+
+.gameHeader {
+  position: relative;
+  min-height: 57px;
+  border-bottom: 1px solid var(--border);
+  background: var(--page);
+}
+
+.headerInner {
+  display: flex;
+  width: min(calc(100% - 40px), 880px);
+  min-height: 56px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-inline: auto;
+}
+
+.gameName {
+  min-width: 0;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 670;
+  letter-spacing: -0.025em;
+}
+
+.progressText {
+  flex: none;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.progressTrack {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: transparent;
+  overflow: hidden;
+}
+.progressTrack span {
+  display: block;
+  height: 100%;
+  background: var(--text);
 }
 
 .hero {
@@ -40,6 +89,15 @@
   border-radius: 13px;
   background: var(--surface);
 }
+
+.resultsHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 17px;
+}
+.resultsHeading h2 { margin: 0; }
 
 .card h2 {
   margin: 0 0 17px;
@@ -185,6 +243,8 @@
     min-height: 0;
     padding: 20px;
   }
+  .gameHeader .headerInner { width: calc(100% - 32px); }
+
 }
 
 @media (max-height: 470px) and (orientation: landscape) {
@@ -194,4 +254,12 @@
   .hero[data-game="visual-memory"] {
     min-height: 415px;
   }
+}
+
+@media (max-width: 400px) {
+  .details { width: calc(100% - 28px); }
+  .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 10px; }
+  .metric:last-child { grid-column: 1 / -1; }
+  .gameName { font-size: 0.81rem; }
+  .progressText { font-size: 0.7rem; }
 }

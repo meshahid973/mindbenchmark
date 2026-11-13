@@ -4,8 +4,6 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const navigation = [
   { to: "/games", label: "Games" },
-  { to: "/multiplayer", label: "Multiplayer" },
-  { to: "/leaderboards", label: "Leaderboards" },
 ] as const;
 
 export function SiteHeader() {

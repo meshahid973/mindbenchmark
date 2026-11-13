@@ -1,5 +1,6 @@
 import { Eye } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { GameAction } from "../components/GameAction";
 import { GameShell } from "../components/GameShell";
 import { PracticePanel } from "../components/PracticePanel";
 import { advanceAdaptive, adaptiveSummary, initialAdaptive } from "../core/adaptive";
@@ -146,6 +147,7 @@ export default function VisualMemory() {
     <GameShell
       game="visual-memory"
       revision={revision}
+      progress={{ label: `Level ${level}` }}
       active={phase === "showing" || phase === "input"}
       practice={<PracticePanel enabled={adaptive} onChange={changePractice}
         label="Adaptive practice"
@@ -162,7 +164,7 @@ export default function VisualMemory() {
                 {phase === "finished" ? adaptive ? "Try another pattern" : `Level ${completed}` :
                   phase === "passed" ? "Correct" : "Visual Memory"}
               </h1>
-              <button className={stage.primary} type="button" onClick={() => {
+              <GameAction onClick={() => {
                 if (!adaptive && phase !== "passed") {
                   setLives(3);
                   setCompleted(0);
@@ -170,7 +172,7 @@ export default function VisualMemory() {
                 startLevel(adaptive ? progress.level : phase === "passed" ? level + 1 : 1);
               }}>
                 {adaptive ? phase === "ready" ? "Start practice" : "Next practice" : phase === "passed" ? "Next" : phase === "finished" ? "Try again" : "Start"}
-              </button>
+              </GameAction>
             </>
           ) : (
             <>
