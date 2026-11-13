@@ -1,0 +1,34 @@
+{
+  "name": "mindbenchmark",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "cf dev",
+    "build": "npm run typecheck && cf build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint src worker vite.config.ts cloudflare.config.ts",
+    "format": "biome format --write src worker vite.config.ts cloudflare.config.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-router": "8.5.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.7",
+    "@cloudflare/vite-plugin": "2.0.0-beta.v.15",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.2.1",
+    "cf": "1.0.0-beta.30",
+    "typescript": "7.0.2",
+    "vite": "8.3.8",
+    "vitest": "5.1.0"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  }
+}
