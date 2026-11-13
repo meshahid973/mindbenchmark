@@ -16,7 +16,8 @@ describe("game shell", () => {
     expect(html).toContain('data-playing="true"');
     expect(html).toContain('aria-hidden="true"');
     expect(html).toContain("Your results");
-    expect(html).toContain("Click when the cue changes.");
+    expect(html).toContain("How to play");
+    expect(html).toContain('aria-expanded="false"');
     expect(html).toContain("Start");
   });
 });
