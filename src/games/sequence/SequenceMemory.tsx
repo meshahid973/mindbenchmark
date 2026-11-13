@@ -13,6 +13,7 @@ export default function SequenceMemory() {
   const sequenceRef = useRef<number[]>([]);
   const progressRef = useRef(0);
   const timers = useRef<number[]>([]);
+  const feedbackTimer = useRef<number | null>(null);
   const [mode, setMode] = useState<Mode>("ready");
   const [level, setLevel] = useState(1);
   const [lit, setLit] = useState<number | null>(null);
@@ -22,6 +23,8 @@ export default function SequenceMemory() {
   const cancelPlayback = useCallback(() => {
     for (const timer of timers.current) window.clearTimeout(timer);
     timers.current = [];
+    if (feedbackTimer.current !== null) window.clearTimeout(feedbackTimer.current);
+    feedbackTimer.current = null;
   }, []);
 
   function schedule(callback: () => void, delay: number) {
@@ -85,16 +88,18 @@ export default function SequenceMemory() {
       setMode("failed");
       const score = level - 1;
       setCompleted(score);
-      if (score > 0) {
-        saveScore("sequence-memory", score);
-        setRevision((value) => value + 1);
-      }
+      saveScore("sequence-memory", score);
+      setRevision((value) => value + 1);
       return;
     }
 
     progressRef.current += 1;
+    if (feedbackTimer.current !== null) window.clearTimeout(feedbackTimer.current);
     setLit(tile);
-    schedule(() => setLit(null), 130);
+    feedbackTimer.current = window.setTimeout(() => {
+      feedbackTimer.current = null;
+      setLit(null);
+    }, 130);
 
     if (progressRef.current === sequence.length) {
       modeRef.current = "levelup";

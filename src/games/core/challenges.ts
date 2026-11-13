@@ -70,8 +70,11 @@ export function typingPassage(count = 95): string {
   }
   const words: string[] = [];
   for (let index = 0; index < count; index += 1) {
-    const choices = wordBank.filter((word) => word !== words[index - 1]);
-    words.push(choices[randomInt(0, choices.length - 1)]);
+    let word = wordBank[randomInt(0, wordBank.length - 1)];
+    while (word === words[index - 1]) {
+      word = wordBank[randomInt(0, wordBank.length - 1)];
+    }
+    words.push(word);
   }
   return words.join(" ");
 }

@@ -17,12 +17,14 @@ export default function VisualMemory() {
   const [size, setSize] = useState(3);
   const [highlights, setHighlights] = useState<number[]>([]);
   const [selected, setSelected] = useState<number[]>([]);
+  const [missed, setMissed] = useState<number[]>([]);
   const [completed, setCompleted] = useState(0);
   const [revision, setRevision] = useState(0);
 
   const timer = useRef<number | null>(null);
   const phaseRef = useRef<Phase>("ready");
   const chosen = useRef(new Set<number>());
+  const missedRef = useRef(new Set<number>());
 
   const clearTimer = useCallback(() => {
     if (timer.current !== null) window.clearTimeout(timer.current);
@@ -35,6 +37,8 @@ export default function VisualMemory() {
       clearTimer();
       phaseRef.current = "ready";
       chosen.current.clear();
+      missedRef.current.clear();
+      setMissed([]);
       setPhase("ready");
       setLevel(1);
       setLives(3);
@@ -55,10 +59,12 @@ export default function VisualMemory() {
     clearTimer();
     const pattern = visualPattern(nextLevel);
     chosen.current = new Set();
+    missedRef.current = new Set();
     setLevel(nextLevel);
     setSize(pattern.size);
     setHighlights(pattern.highlighted);
     setSelected([]);
+    setMissed([]);
     phaseRef.current = "showing";
     setPhase("showing");
     timer.current = window.setTimeout(() => {
@@ -71,8 +77,10 @@ export default function VisualMemory() {
   }
 
   function press(index: number) {
-    if (phaseRef.current !== "input" || chosen.current.has(index)) return;
+    if (phaseRef.current !== "input" || chosen.current.has(index) || missedRef.current.has(index)) return;
     if (!highlights.includes(index)) {
+      missedRef.current.add(index);
+      setMissed([...missedRef.current]);
       const remaining = lives - 1;
       setLives(remaining);
       if (remaining === 0) {
@@ -144,8 +152,9 @@ export default function VisualMemory() {
                     type="button"
                     className={styles.visualTile}
                     data-lit={phase === "showing" ? highlights.includes(cell) : selected.includes(cell)}
-                    aria-label={`Square ${cell + 1}`}
-                    disabled={phase === "showing" || selected.includes(cell)}
+                    data-missed={missed.includes(cell)}
+                    aria-label={`Square ${cell + 1}${missed.includes(cell) ? ", incorrect" : ""}`}
+                    disabled={phase === "showing" || selected.includes(cell) || missed.includes(cell)}
                     onClick={() => press(cell)}
                   />
                 ))}

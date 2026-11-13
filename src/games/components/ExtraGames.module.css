@@ -136,6 +136,18 @@
   cursor: default;
 }
 
+.chimpTile[data-empty="true"] {
+  border-color: transparent;
+  background: transparent;
+  cursor: default;
+}
+
+.visualTile[data-missed="true"] {
+  border-style: dashed;
+  opacity: 0.48;
+  cursor: default;
+}
+
 .visualGrid {
   width: min(365px, calc(100vw - 38px));
 }
