@@ -25,7 +25,6 @@ export function GameShell({
         <article className={styles.card}>
           <h2>How it works</h2>
           <p>{howTo}</p>
-          <p className={styles.note}>Results depend on your device and input. Scores are saved on this device.</p>
         </article>
       </section>
     </div>
