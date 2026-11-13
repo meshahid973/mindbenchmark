@@ -25,6 +25,6 @@ describe("typing micro-drills", () => {
     const words = passage.split(" ");
     expect(words).toHaveLength(20);
     expect(words.every((word) => word.includes("th"))).toBe(true);
-    expect(typingMicroDrill(["zz"])).toBe("");
+    expect(typingMicroDrill(["qq"])).toBe("");
   });
 });
