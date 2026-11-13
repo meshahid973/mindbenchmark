@@ -8,6 +8,7 @@ import { saveScore } from "../core/scores";
 
 type Phase = "ready" | "playing" | "finished";
 const maximum = 18;
+const cells = Array.from({ length: 36 }, (_, value) => value);
 
 export default function ChimpTest() {
   const [phase, setPhase] = useState<Phase>("ready");
@@ -81,18 +82,18 @@ export default function ChimpTest() {
               <div className={styles.stats}><span>{level} numbers</span><span>Lives {lives}</span></div>
               <h1 className={styles.shortTitle}>Chimp Test</h1>
               <fieldset className={styles.chimpGrid} aria-label="Number memory grid">
-                {board.map((value, index) => (
+                {cells.map((cell) => (
                   <button
-                    key={index}
+                    key={cell}
                     type="button"
                     className={styles.chimpTile}
-                    data-visible={!hidden && value > 0}
-                    data-cleared={cleared.includes(index)}
-                    aria-label={!hidden && value > 0 ? `Number ${value}` : `Cell ${index + 1}`}
-                    disabled={cleared.includes(index)}
-                    onClick={() => clickCell(index)}
+                    data-visible={!hidden && board[cell] > 0}
+                    data-cleared={cleared.includes(cell)}
+                    aria-label={!hidden && board[cell] > 0 ? `Number ${board[cell]}` : `Cell ${cell + 1}`}
+                    disabled={cleared.includes(cell)}
+                    onClick={() => clickCell(cell)}
                   >
-                    {!hidden && value > 0 ? value : ""}
+                    {!hidden && board[cell] > 0 ? board[cell] : ""}
                   </button>
                 ))}
               </fieldset>

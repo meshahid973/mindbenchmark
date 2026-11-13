@@ -29,12 +29,12 @@ export function ScoreTrend({ values, unit }: { values: readonly number[]; unit: 
           strokeLinejoin="round"
           vectorEffect="non-scaling-stroke"
         />
-        {points.map(({ x, y }, index) => (
+        {points.map(({ x, y }) => (
           <circle
-            key={index}
+            key={x}
             cx={x}
             cy={y}
-            r={index === points.length - 1 ? 3 : 1.6}
+            r={x === points[points.length - 1].x ? 3 : 1.6}
             fill="currentColor"
           />
         ))}

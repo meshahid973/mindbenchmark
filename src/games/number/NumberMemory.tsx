@@ -16,7 +16,12 @@ export default function NumberMemory() {
   const [answer, setAnswer] = useState("");
   const [revision, setRevision] = useState(0);
   const timer = useRef<number | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const phaseRef = useRef<Phase>("ready");
+
+  useEffect(() => {
+    if (phase === "answer") inputRef.current?.focus();
+  }, [phase]);
 
   const clear = useCallback(() => {
     if (timer.current !== null) window.clearTimeout(timer.current);
@@ -115,7 +120,7 @@ export default function NumberMemory() {
                 type="text"
                 inputMode="numeric"
                 autoComplete="off"
-                autoFocus
+                ref={inputRef}
                 value={answer}
                 maxLength={digits.length}
                 onChange={(event) => setAnswer(event.target.value.replace(/\D/g, ""))}

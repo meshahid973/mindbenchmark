@@ -22,6 +22,7 @@ export default function TypingSpeed() {
 
   const phaseRef = useRef<Phase>("ready");
   const startedAt = useRef(0);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const typedRef = useRef("");
   const passageRef = useRef("");
 
@@ -39,6 +40,10 @@ export default function TypingSpeed() {
     saveScore("typing-speed", wpm);
     setRevision((value) => value + 1);
   }, []);
+
+  useEffect(() => {
+    if (phase === "typing") inputRef.current?.focus();
+  }, [phase]);
 
   useEffect(() => {
     if (phase !== "running") return;
@@ -133,7 +138,7 @@ export default function TypingSpeed() {
               <textarea
                 id="typing-input"
                 className={styles.typingInput}
-                autoFocus
+                ref={inputRef}
                 autoComplete="off"
                 autoCapitalize="off"
                 spellCheck={false}

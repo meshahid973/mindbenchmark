@@ -8,6 +8,7 @@ import { saveScore } from "../core/scores";
 
 type Phase = "ready" | "showing" | "input" | "passed" | "finished";
 const maximumLevel = 15;
+const cells = Array.from({ length: 36 }, (_, value) => value);
 
 export default function VisualMemory() {
   const [phase, setPhase] = useState<Phase>("ready");
@@ -71,7 +72,7 @@ export default function VisualMemory() {
 
   function press(index: number) {
     if (phaseRef.current !== "input" || chosen.current.has(index)) return;
-    if (!highlights.includes(index)) {
+    if (!highlights.includes(cell)) {
       const remaining = lives - 1;
       setLives(remaining);
       if (remaining === 0) {
@@ -137,15 +138,15 @@ export default function VisualMemory() {
                 aria-label="Visual memory grid"
                 style={{ gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }}
               >
-                {Array.from({ length: size * size }, (_, index) => (
+                {cells.slice(0, size * size).map((cell) => (
                   <button
-                    key={index}
+                    key={cell}
                     type="button"
                     className={styles.visualTile}
-                    data-lit={phase === "showing" ? highlights.includes(index) : selected.includes(index)}
-                    aria-label={`Square ${index + 1}`}
+                    data-lit={phase === "showing" ? highlights.includes(index) : selected.includes(cell)}
+                    aria-label={`Square ${cell + 1}`}
                     disabled={phase === "showing" || selected.includes(index)}
-                    onClick={() => press(index)}
+                    onClick={() => press(cell)}
                   />
                 ))}
               </fieldset>
