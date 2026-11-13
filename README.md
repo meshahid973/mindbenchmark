@@ -1,10 +1,10 @@
 # MindBenchmark
 
-Fast, minimal brain games with multiplayer coming later.
+Fast, minimal brain games, built with React and Cloudflare.
 
-## Local development
+## Development
 
-Requires Node.js 22.18+ and npm.
+Use Node.js 22.18+.
 
 ```bash
 npm install
@@ -20,6 +20,6 @@ npm test
 npm run build
 ```
 
-`npm run build` creates Cloudflare Build Output without deploying it. The UI currently contains routes and placeholders, not playable games. `/api/health` is the first Worker endpoint.
+The site includes the homepage, game directory, theme switcher and placeholder routes. The games and multiplayer backend are planned but not yet playable.
 
-Cloudflare hosting uses Workers Static Assets with the `cf` CLI and Vite plugin v2. No Cloudflare services, accounts, or secrets are required for this foundation PR. Deployment is intentionally deferred.
+The frontend uses Cloudflare Workers Static Assets through the `cf` CLI. Nothing deploys automatically from CI.

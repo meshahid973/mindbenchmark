@@ -1,0 +1,54 @@
+.root {
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--segment-surface);
+}
+.track {
+  --fade-start: 0px;
+  --fade-end: 0px;
+  isolation: isolate;
+  display: flex;
+  min-width: 0;
+  gap: 2px;
+  padding: 4px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  border-radius: inherit;
+  scrollbar-width: none;
+  mask-image: linear-gradient(to right, transparent, #000 var(--fade-start), #000 calc(100% - var(--fade-end)), transparent);
+}
+.track::-webkit-scrollbar { display: none; }
+.track[data-fade-start] { --fade-start: 18px; }
+.track[data-fade-end] { --fade-end: 18px; }
+.button {
+  position: relative;
+  flex: 0 0 auto;
+  min-height: 36px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--color-muted);
+  font: inherit;
+  font-size: .85rem;
+  font-weight: 560;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 140ms ease;
+}
+.button:hover, .button[aria-pressed="true"] { color: var(--color-text); }
+.button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+.selection {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border: 1px solid var(--color-border);
+  border-radius: inherit;
+  background: var(--color-surface);
+  box-shadow: 0 1px 3px var(--color-shadow);
+}
+.label { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) { .button { transition: none; } }
