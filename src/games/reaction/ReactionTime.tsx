@@ -5,6 +5,7 @@ import { GameShell } from "../components/GameShell";
 import styles from "../components/Stage.module.css";
 import { reactionDelay } from "../core/random";
 import { activationKey, primaryPointer } from "../core/input";
+import { useGameInterruption } from "../core/useGameInterruption";
 import { mean, median, saveScore } from "../core/scores";
 import {
   elapsedMilliseconds,
