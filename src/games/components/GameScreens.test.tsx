@@ -35,7 +35,10 @@ describe("game screens", () => {
   });
 
   it("provides focused start controls", () => {
-    expect(renderToStaticMarkup(<AimTrainer />)).toContain(">Start</button>");
+    const aimHtml = renderToStaticMarkup(<AimTrainer />);
+    expect(aimHtml).toContain(">Start</button>");
+    expect(aimHtml).toContain("Standard · 30");
+    expect(aimHtml).toContain("Quick · 20");
     expect(renderToStaticMarkup(<TypingSpeed />)).toContain(">Start</button>");
     expect(renderToStaticMarkup(<NumberMemory />)).toContain(">Start</button>");
   });

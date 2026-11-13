@@ -4,6 +4,7 @@ import { GameShell } from "../components/GameShell";
 import styles from "../components/Stage.module.css";
 import { nextSequence } from "../core/random";
 import { saveScore } from "../core/scores";
+import { useGameInterruption } from "../core/useGameInterruption";
 
 type Mode = "ready" | "showing" | "input" | "levelup" | "failed";
 const tiles = [0, 1, 2, 3, 4, 5, 6, 7, 8] as const;
@@ -31,24 +32,18 @@ export default function SequenceMemory() {
     timers.current.push(window.setTimeout(callback, delay));
   }
 
-  useEffect(() => {
-    function onVisibilityChange() {
-      if (!document.hidden || modeRef.current === "ready" || modeRef.current === "failed") return;
-      cancelPlayback();
-      modeRef.current = "ready";
-      sequenceRef.current = [];
-      progressRef.current = 0;
-      setMode("ready");
-      setLit(null);
-      setLevel(1);
-    }
+  useGameInterruption(() => {
+    if (modeRef.current === "ready" || modeRef.current === "failed") return;
+    cancelPlayback();
+    modeRef.current = "ready";
+    sequenceRef.current = [];
+    progressRef.current = 0;
+    setMode("ready");
+    setLit(null);
+    setLevel(1);
+  });
 
-    document.addEventListener("visibilitychange", onVisibilityChange);
-    return () => {
-      document.removeEventListener("visibilitychange", onVisibilityChange);
-      cancelPlayback();
-    };
-  }, [cancelPlayback]);
+  useEffect(() => () => cancelPlayback(), [cancelPlayback]);
 
   function playSequence(sequence: number[], newLevel: number) {
     cancelPlayback();

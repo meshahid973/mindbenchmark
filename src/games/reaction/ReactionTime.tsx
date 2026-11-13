@@ -4,6 +4,7 @@ import { flushSync } from "react-dom";
 import { GameShell } from "../components/GameShell";
 import styles from "../components/Stage.module.css";
 import { reactionDelay } from "../core/random";
+import { activationKey, primaryPointer } from "../core/input";
 import { mean, median, saveScore } from "../core/scores";
 import {
   elapsedMilliseconds,
@@ -22,6 +23,7 @@ type Session = {
   timer: number | null;
   frame: number | null;
   paintFrame: number | null;
+  armed: boolean;
 };
 
 function stopTimer(session: Session) {
@@ -41,35 +43,25 @@ export default function ReactionTime() {
     timer: null,
     frame: null,
     paintFrame: null,
+    armed: false,
   });
 
   const [phase, setPhase] = useState<Phase>("ready");
   const [times, setTimes] = useState<number[]>([]);
   const [revision, setRevision] = useState(0);
 
-  useEffect(() => {
-    function resetIfInterrupted() {
-      const current = session.current;
-      if (current.phase !== "waiting" && current.phase !== "go") return;
-      stopTimer(current);
-      current.phase = "ready";
-      current.trials = [];
-      setTimes([]);
-      setPhase("ready");
-    }
+  useGameInterruption(() => {
+    const current = session.current;
+    if (current.phase !== "waiting" && current.phase !== "go") return;
+    stopTimer(current);
+    current.armed = false;
+    current.phase = "ready";
+    current.trials = [];
+    setTimes([]);
+    setPhase("ready");
+  });
 
-    function onVisibilityChange() {
-      if (document.hidden) resetIfInterrupted();
-    }
-
-    document.addEventListener("visibilitychange", onVisibilityChange);
-    window.addEventListener("blur", resetIfInterrupted);
-    return () => {
-      document.removeEventListener("visibilitychange", onVisibilityChange);
-      window.removeEventListener("blur", resetIfInterrupted);
-      stopTimer(session.current);
-    };
-  }, []);
+  useEffect(() => () => stopTimer(session.current), []);
 
   function startRound() {
     const current = session.current;
@@ -80,6 +72,7 @@ export default function ReactionTime() {
     }
 
     current.phase = "waiting";
+    current.armed = false;
     setPhase("waiting");
 
     current.timer = window.setTimeout(() => {
@@ -100,6 +93,7 @@ export default function ReactionTime() {
           current.paintFrame = null;
           if (current.phase === "go") {
             current.startedAt = presentedAt(current.startedAt, frameTime);
+            current.armed = true;
           }
         });
       });
@@ -127,6 +121,12 @@ export default function ReactionTime() {
     }
 
     if (current.phase !== "go") return;
+    if (!current.armed) {
+      stopTimer(current);
+      current.phase = "early";
+      setPhase("early");
+      return;
+    }
 
     // A press queued before green must not become a zero-millisecond result.
     const elapsed = elapsedMilliseconds(current.startedAt, pressedAt);
@@ -182,11 +182,11 @@ export default function ReactionTime() {
             className={styles.fillAction}
             aria-label={message ? `${heading}. ${message}` : heading}
             onPointerDown={(event) => {
-              if (event.pointerType === "mouse" && event.button !== 0) return;
+              if (!primaryPointer(event)) return;
               respond(inputTimestamp(event.timeStamp, performance.now()));
             }}
             onKeyDown={(event) => {
-              if (event.repeat || (event.key !== " " && event.key !== "Enter")) return;
+              if (!activationKey(event)) return;
               event.preventDefault();
               respond(inputTimestamp(event.timeStamp, performance.now()));
             }}
