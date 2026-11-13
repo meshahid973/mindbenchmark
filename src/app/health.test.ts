@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { handleHealth, onRequest } from "./health";
+import { handleHealth, onRequest } from "../../functions/api/health";
 
 describe("Pages health function", () => {
   it("returns a non-cacheable health response", async () => {
