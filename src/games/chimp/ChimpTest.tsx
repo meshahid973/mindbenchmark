@@ -1,5 +1,5 @@
 import { Puzzle } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GameShell } from "../components/GameShell";
 import stage from "../components/Stage.module.css";
 import styles from "../components/ExtraGames.module.css";
@@ -22,6 +22,30 @@ export default function ChimpTest() {
   const modeRef = useRef<Phase>("ready");
   const nextRef = useRef(1);
   const completed = useRef(0);
+
+  useEffect(() => {
+    function resetIfInterrupted() {
+      if (modeRef.current !== "playing") return;
+      modeRef.current = "ready";
+      completed.current = 0;
+      nextRef.current = 1;
+      setPhase("ready");
+      setBoard([]);
+      setHidden(false);
+      setCleared([]);
+      setLevel(4);
+      setLives(3);
+    }
+    function onVisibilityChange() {
+      if (document.hidden) resetIfInterrupted();
+    }
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    window.addEventListener("blur", resetIfInterrupted);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      window.removeEventListener("blur", resetIfInterrupted);
+    };
+  }, []);
 
   function begin(nextLevel = 4, remainingLives = 3) {
     modeRef.current = "playing";
