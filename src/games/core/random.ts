@@ -17,8 +17,23 @@ export function randomInt(min: number, max: number): number {
   return min + (value[0] % range);
 }
 
+export const reactionMinimumWait = 1000;
+export const reactionMeanExtraWait = 2200;
+
+/** Shifted exponential wait: after the initial second the hazard is constant.
+ * Unlike a bounded uniform wait, reaching a late point does not signal that
+ * the cue must be about to appear. A fresh independent draw is used each round.
+ */
+export function reactionDelayFromUnit(unit: number): number {
+  if (!Number.isFinite(unit) || unit < 0 || unit >= 1) {
+    throw new RangeError("Invalid reaction random sample");
+  }
+  return Math.floor(reactionMinimumWait - reactionMeanExtraWait * Math.log1p(-unit));
+}
+
 export function reactionDelay(): number {
-  return randomInt(1200, 7800);
+  const unit = (randomInt(0, 0xffffffff) + 0.5) / 0x100000000;
+  return reactionDelayFromUnit(unit);
 }
 
 export function nextSequence(sequence: readonly number[]): number[] {
