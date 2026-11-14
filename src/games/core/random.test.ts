@@ -4,13 +4,33 @@ import {
   nextTarget,
   randomInt,
   reactionDelay,
+  reactionDelayFromUnit,
+  reactionMinimumWait,
+  reactionMeanExtraWait,
 } from "./random";
 
 describe("game randomness", () => {
-  it("samples unpredictable reaction delays in the allowed range", () => {
+  it("samples independent, finite reaction delays above the minimum", () => {
     const delays = Array.from({ length: 250 }, () => reactionDelay());
-    expect(delays.every((delay) => delay >= 1200 && delay <= 7800)).toBe(true);
-    expect(new Set(delays).size).toBeGreaterThan(200);
+    expect(delays.every((delay) => Number.isFinite(delay) && delay >= reactionMinimumWait)).toBe(true);
+    expect(new Set(delays).size).toBeGreaterThan(100);
+  });
+
+  it("uses a shifted exponential rather than a predictable maximum wait", () => {
+    expect(reactionDelayFromUnit(0)).toBe(reactionMinimumWait);
+    expect(reactionDelayFromUnit(1 - Math.exp(-1))).toBeCloseTo(
+      reactionMinimumWait + reactionMeanExtraWait, 0,
+    );
+    expect(reactionDelayFromUnit(0.5)).toBe(2524);
+    expect(reactionDelayFromUnit(0.99)).toBeGreaterThan(10_000);
+    // Equal intervals have equal conditional survival probabilities.
+    const interval = 1000;
+    const survival = Math.exp(-interval / reactionMeanExtraWait);
+    const q1 = 1 - Math.exp(-interval / reactionMeanExtraWait);
+    const q2 = 1 - Math.exp(-2 * interval / reactionMeanExtraWait);
+    expect((1 - q2) / (1 - q1)).toBeCloseTo(survival);
+    expect(() => reactionDelayFromUnit(1)).toThrow(RangeError);
+    expect(() => reactionDelayFromUnit(-0.01)).toThrow(RangeError);
   });
 
   it("rejects invalid random boundaries", () => {

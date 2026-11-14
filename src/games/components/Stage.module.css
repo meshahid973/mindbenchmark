@@ -21,7 +21,7 @@
   background: transparent;
   color: inherit;
   cursor: pointer;
-  touch-action: manipulation;
+  touch-action: none;
 }
 
 .fillAction:focus-visible {
